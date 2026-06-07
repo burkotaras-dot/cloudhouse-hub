@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloudhouse Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  /* ═══════════════════════════════════════════════════════
+     PRIMITIVE SCALE — Hub's own palette (indigo on slate)
+     ═══════════════════════════════════════════════════════ */
+  /* Indigo (brand) */
+  --p-indigo-50:  #EEF0FF;
+  --p-indigo-100: #E0E3FF;
+  --p-indigo-200: #C4C9FF;
+  --p-indigo-300: #A5ABFF;
+  --p-indigo-400: #818CF8;
+  --p-indigo-500: #6366F1;
+  --p-indigo-600: #4F46E5;
+  --p-indigo-700: #4338CA;
+  --p-indigo-800: #3730A3;
+
+  /* Slate (neutral) */
+  --p-slate-0:   #FFFFFF;
+  --p-slate-50:  #F6F7FB;
+  --p-slate-100: #EEF1F6;
+  --p-slate-200: #E2E6EE;
+  --p-slate-300: #CBD2DE;
+  --p-slate-400: #97A1B2;
+  --p-slate-500: #6B7588;
+  --p-slate-600: #4B5567;
+  --p-slate-700: #333C4E;
+  --p-slate-800: #1E2435;
+  --p-slate-900: #11151F;
+
+  /* Dark surfaces (indigo-tinted) */
+  --p-dark-canvas:        #0B0F1A;
+  --p-dark-surface:       #141A2B;
+  --p-dark-surface-raised:#1A2236;
+  --p-dark-subtle:        #10162455;
+  --p-dark-border:        #232B40;
+  --p-dark-border-strong: #323D58;
+
+  /* Status */
+  --p-green-400: #34D399;
+  --p-green-500: #10B981;
+  --p-green-600: #059669;
+  --p-amber-400: #FBBF24;
+  --p-amber-500: #F59E0B;
+  --p-amber-600: #D97706;
+  --p-red-400:   #F87171;
+  --p-red-500:   #EF4444;
+  --p-red-600:   #DC2626;
+  --p-blue-500:  #3B82F6;
+  --p-violet-500:#8B5CF6;
+  --p-teal-500:  #14B8A6;
+
+  /* ═══════════════════════════════════════════════════════
+     SEMANTIC TOKENS — LIGHT
+     ═══════════════════════════════════════════════════════ */
+  --text-default:  #11151F;
+  --text-sec:      #4B5567;
+  --text-subtle:   #97A1B2;
+  --text-inverse:  #FFFFFF;
+  --text-disabled: #CBD2DE;
+
+  --bg-canvas:   #F6F7FB;
+  --bg-surface:  #FFFFFF;
+  --bg-subtle:   #EEF1F6;
+  --bg-elevated: #FFFFFF;
+
+  --border-default: #E2E6EE;
+  --border-subtle:  #EEF1F6;
+  --border-strong:  #CBD2DE;
+  --border-focus:   #6366F1;
+
+  --brand-primary: #4F46E5;
+  --brand-hover:   #4338CA;
+  --brand-soft:    rgba(79,70,229,0.08);
+  --brand-soft-bd: rgba(79,70,229,0.20);
+
+  --status-success: #059669;
+  --status-warning: #D97706;
+  --status-danger:  #DC2626;
+  --status-info:    #3B82F6;
+
+  --shadow-sm: 0 1px 3px rgba(17,21,31,0.06), 0 1px 2px rgba(17,21,31,0.04);
+  --shadow-md: 0 6px 20px rgba(17,21,31,0.08), 0 2px 6px rgba(17,21,31,0.04);
+  --shadow-lg: 0 16px 48px rgba(17,21,31,0.14), 0 6px 16px rgba(17,21,31,0.06);
+
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* aliases */
+  --bg-page: var(--bg-canvas);
+  --bg-card: var(--bg-surface);
+  --border:  var(--border-default);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DARK THEME
+   ═══════════════════════════════════════════════════════ */
+body.dark {
+  --text-default:  #F3F5FA;
+  --text-sec:      #B8C0D0;
+  --text-subtle:   #7A8498;
+  --text-inverse:  #11151F;
+  --text-disabled: #4B5567;
+
+  --bg-canvas:   var(--p-dark-canvas);
+  --bg-surface:  var(--p-dark-surface);
+  --bg-subtle:   var(--p-dark-surface-raised);
+  --bg-elevated: var(--p-dark-surface-raised);
+
+  --border-default: var(--p-dark-border);
+  --border-subtle:  #1A2133;
+  --border-strong:  var(--p-dark-border-strong);
+
+  --brand-soft:    rgba(99,102,241,0.16);
+  --brand-soft-bd: rgba(99,102,241,0.35);
+
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.5);
+  --shadow-md: 0 6px 24px rgba(0,0,0,0.55);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.6);
+
+  --bg-page: var(--bg-canvas);
+  --bg-card: var(--bg-surface);
+  --border:  var(--border-default);
+}
+
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: var(--bg-canvas);
+  color: var(--text-default);
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Top bar ── */
+.topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  position: relative;
+  z-index: 20;
+}
+.brand { display:flex; align-items:center; gap:11px; }
+.brand-mark {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; box-shadow: 0 2px 8px rgba(79,70,229,0.35);
+}
+.brand-name { font-size:15px; font-weight:800; letter-spacing:-0.3px; color:var(--text-default); }
+.brand-name span { color: var(--brand-primary); }
+.topbar-right { display:flex; align-items:center; gap:14px; }
+.org-chip {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:600; color:var(--text-sec);
+  background: var(--bg-subtle); border:1px solid var(--border-default);
+  padding:6px 12px; border-radius:20px;
+}
+.org-chip .dot { width:7px; height:7px; border-radius:50%; background:var(--p-green-500); }
+.icon-btn {
+  width:34px; height:34px; border-radius:9px; border:1px solid var(--border-default);
+  background:var(--bg-surface); color:var(--text-sec); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .15s;
+}
+.icon-btn:hover { border-color:var(--brand-soft-bd); color:var(--brand-primary); }
+.avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,#818CF8,#4F46E5);
+  color:#fff; font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ── Shell ── */
+.shell { display:flex; height: calc(100vh - 60px); }
+
+/* ── Sidebar (Control Panel only) ── */
+.sidebar {
+  width: 232px; flex-shrink:0;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  padding: 18px 12px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+.sidebar.visible { display: flex; }
+.sidebar-back {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:600; color:var(--text-sec);
+  padding:8px 12px; border-radius:8px; cursor:pointer; margin-bottom:8px;
+  transition: all .15s;
+}
+.sidebar-back:hover { background:var(--bg-subtle); color:var(--text-default); }
+.sidebar-section-label {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px;
+  color:var(--text-subtle); padding:12px 12px 6px;
+}
+.sidebar-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:9px; cursor:pointer;
+  font-size:13px; font-weight:600; color:var(--text-sec);
+  border:1px solid transparent; transition: all .15s;
+}
+.sidebar-item:hover { background:var(--bg-subtle); color:var(--text-default); }
+.sidebar-item.active {
+  background: var(--brand-soft); color: var(--brand-primary);
+  border-color: var(--brand-soft-bd);
+}
+.sidebar-item svg { flex-shrink:0; }
+
+/* ── Main ── */
+.main { flex:1; overflow-y:auto; min-width:0; background:var(--bg-canvas); }
+.view { display:none; flex-direction:column; min-height:100%; animation: fadeUp .22s ease; }
+.view.active { display:flex; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px);} to {opacity:1; transform:none;} }
+
+.page-pad { padding: 28px 32px; }
+.page-head { margin-bottom: 22px; }
+.page-title { font-size:20px; font-weight:800; letter-spacing:-0.4px; color:var(--text-default); }
+.page-sub { font-size:13px; color:var(--text-sec); margin-top:4px; }
+
+/* ── Portal ── */
+.portal-wrap { max-width: 960px; margin: 0 auto; width:100%; padding: 44px 32px; }
+.portal-head { text-align:center; margin-bottom: 30px; }
+.portal-head h1 { font-size:26px; font-weight:800; letter-spacing:-0.6px; }
+.portal-head p { font-size:14px; color:var(--text-sec); margin-top:8px; }
+
+.scenario-bar {
+  display:flex; align-items:center; gap:8px; justify-content:center;
+  margin-bottom: 28px; flex-wrap:wrap;
+}
+.scenario-bar .lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-right:4px; }
+.seg {
+  display:inline-flex; background:var(--bg-subtle); border:1px solid var(--border-default);
+  border-radius:10px; padding:3px; gap:2px;
+}
+.seg button {
+  border:none; background:transparent; cursor:pointer;
+  font-size:12px; font-weight:600; color:var(--text-sec);
+  padding:6px 12px; border-radius:7px; transition:all .15s; font-family:inherit;
+}
+.seg button.active { background:var(--bg-surface); color:var(--brand-primary); box-shadow:var(--shadow-sm); }
+
+.tile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.tile {
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:var(--radius-lg); padding:22px; cursor:pointer;
+  transition: all .18s; position:relative; display:flex; flex-direction:column; gap:14px;
+  box-shadow:var(--shadow-sm);
+}
+.tile:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:var(--brand-soft-bd); }
+.tile.disabled { opacity:.55; cursor:not-allowed; }
+.tile.disabled:hover { transform:none; box-shadow:var(--shadow-sm); border-color:var(--border-default); }
+.tile-icon {
+  width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff;
+}
+.tile-icon.guardian { background:linear-gradient(135deg,#10B981,#059669); }
+.tile-icon.foundry  { background:linear-gradient(135deg,#8B5CF6,#6D28D9); }
+.tile-icon.cp       { background:linear-gradient(135deg,#6366F1,#4338CA); }
+.tile-title { font-size:15px; font-weight:700; }
+.tile-sub { font-size:12.5px; color:var(--text-sec); line-height:1.5; }
+.tile-foot { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+.tile-cta { font-size:12.5px; font-weight:700; color:var(--brand-primary); display:flex; align-items:center; gap:5px; }
+.tile-newtab { color:var(--text-subtle); display:flex; }
+.tile-newtab:hover { color:var(--brand-primary); }
+.tile-tag {
+  position:absolute; top:14px; right:14px; font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.4px; padding:3px 8px; border-radius:20px;
+}
+.tile-tag.pending { background:rgba(217,119,6,0.12); color:var(--status-warning); border:1px solid rgba(217,119,6,0.3); }
+.tile-tag.locked  { background:var(--bg-subtle); color:var(--text-subtle); border:1px solid var(--border-default); }
+
+.section-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin:30px 0 14px; }
+
+.notice {
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:var(--radius-lg); padding:22px 24px; box-shadow:var(--shadow-sm);
+}
+.notice-icon { width:42px; height:42px; border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.notice.info .notice-icon  { background:var(--brand-soft); color:var(--brand-primary); }
+.notice.warn .notice-icon  { background:rgba(217,119,6,0.12); color:var(--status-warning); }
+.notice.empty .notice-icon { background:var(--bg-subtle); color:var(--text-subtle); }
+.notice h3 { font-size:15px; font-weight:700; margin-bottom:5px; }
+.notice p { font-size:13px; color:var(--text-sec); line-height:1.55; }
+.notice .acts { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+/* ── Buttons ── */
+.btn {
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  font-family:inherit; font-size:13px; font-weight:600; border-radius:9px;
+  padding:9px 16px; border:1px solid transparent; transition:all .15s; white-space:nowrap;
+}
+.btn-primary { background:var(--brand-primary); color:#fff; box-shadow:0 2px 8px rgba(79,70,229,0.3); }
+.btn-primary:hover { background:var(--brand-hover); }
+.btn-outline { background:var(--bg-surface); border-color:var(--border-strong); color:var(--text-sec); }
+.btn-outline:hover { border-color:var(--brand-soft-bd); color:var(--brand-primary); }
+.btn-ghost { background:transparent; color:var(--text-sec); }
+.btn-ghost:hover { background:var(--bg-subtle); color:var(--text-default); }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.btn-sm { padding:6px 12px; font-size:12px; }
+
+/* ── Toolbar / search ── */
+.toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+.toolbar-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.search {
+  position:relative; width:300px; max-width:100%;
+}
+.search input {
+  width:100%; padding:9px 12px 9px 34px; font-size:13px; font-family:inherit;
+  border:1px solid var(--border-default); border-radius:9px;
+  background:var(--bg-surface); color:var(--text-default);
+}
+.search input:focus { outline:none; border-color:var(--border-focus); }
+.search svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--text-subtle); pointer-events:none; }
+.select {
+  padding:9px 12px; font-size:13px; font-family:inherit; border:1px solid var(--border-default);
+  border-radius:9px; background:var(--bg-surface); color:var(--text-default); cursor:pointer;
+}
+
+/* ── Table ── */
+.panel { background:var(--bg-surface); border:1px solid var(--border-default); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
+table.tbl { width:100%; border-collapse:collapse; }
+.tbl thead th {
+  text-align:left; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+  color:var(--text-subtle); background:var(--bg-subtle); padding:11px 18px; border-bottom:1px solid var(--border-default);
+}
+.tbl tbody td { padding:13px 18px; font-size:13px; border-bottom:1px solid var(--border-subtle); color:var(--text-default); vertical-align:middle; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:hover { background:var(--bg-subtle); }
+.cell-user { display:flex; align-items:center; gap:11px; }
+.cell-user .avatar { width:32px; height:32px; font-size:11px; }
+.cell-user .nm { font-weight:600; }
+.cell-user .em { font-size:11.5px; color:var(--text-subtle); }
+.muted { color:var(--text-sec); }
+.mono { font-family:'JetBrains Mono', monospace; font-size:12px; }
+
+/* ── Badges / chips ── */
+.badge {
+  display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700;
+  padding:3px 9px; border-radius:20px; border:1px solid transparent;
+}
+.badge::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.9; }
+.badge.active  { background:rgba(5,150,105,0.10); color:var(--status-success); border-color:rgba(5,150,105,0.3); }
+.badge.suspended { background:rgba(220,38,38,0.10); color:var(--status-danger); border-color:rgba(220,38,38,0.3); }
+.badge.invited { background:rgba(217,119,6,0.10); color:var(--status-warning); border-color:rgba(217,119,6,0.3); }
+.role-chip {
+  display:inline-flex; align-items:center; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500;
+  background:var(--brand-soft); color:var(--brand-primary); border:1px solid var(--brand-soft-bd);
+  padding:3px 8px; border-radius:6px; margin:2px 4px 2px 0;
+}
+.prod-chip {
+  display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600;
+  padding:3px 9px; border-radius:6px; margin:2px 4px 2px 0;
+  background:var(--bg-subtle); border:1px solid var(--border-default); color:var(--text-sec);
+}
+
+/* ── Pagination ── */
+.pager { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--border-subtle); }
+.pager-info { font-size:12px; color:var(--text-sec); }
+.pager-btns { display:flex; gap:6px; }
+.pager-btns button {
+  min-width:32px; height:32px; border:1px solid var(--border-default); background:var(--bg-surface);
+  border-radius:8px; font-size:12px; font-weight:600; color:var(--text-sec); cursor:pointer; font-family:inherit;
+}
+.pager-btns button.active { background:var(--brand-primary); color:#fff; border-color:var(--brand-primary); }
+.pager-btns button:disabled { opacity:.4; cursor:not-allowed; }
+
+/* ── Toggle switch ── */
+.switch { position:relative; width:40px; height:22px; flex-shrink:0; }
+.switch input { opacity:0; width:0; height:0; }
+.switch .track {
+  position:absolute; inset:0; background:var(--border-strong); border-radius:20px; cursor:pointer; transition:.18s;
+}
+.switch .track::before {
+  content:''; position:absolute; width:16px; height:16px; left:3px; top:3px;
+  background:#fff; border-radius:50%; transition:.18s; box-shadow:0 1px 3px rgba(0,0,0,0.25);
+}
+.switch input:checked + .track { background:var(--brand-primary); }
+.switch input:checked + .track::before { transform:translateX(18px); }
+
+/* ── Token widgets ── */
+.stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+.stat-card { background:var(--bg-surface); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm); }
+.stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-bottom:10px; }
+.stat-value { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1; }
+.stat-foot { font-size:12px; color:var(--text-sec); margin-top:8px; }
+.balance-card {
+  background:linear-gradient(135deg, #4F46E5 0%, #4338CA 100%); color:#fff;
+  border-radius:var(--radius-xl); padding:26px 28px; box-shadow:0 10px 30px rgba(79,70,229,0.35);
+  position:relative; overflow:hidden;
+}
+.balance-card .stat-label { color:rgba(255,255,255,0.75); }
+.balance-card .stat-value { color:#fff; font-size:40px; }
+.balance-card .stat-foot { color:rgba(255,255,255,0.8); }
+.balance-actions { display:flex; gap:10px; margin-top:18px; }
+.balance-card .btn-light { background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.25); }
+.balance-card .btn-light:hover { background:rgba(255,255,255,0.26); }
+
+.alert-banner {
+  display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:var(--radius-lg);
+  background:rgba(217,119,6,0.10); border:1px solid rgba(217,119,6,0.3); margin-bottom:20px;
+}
+.alert-banner .ico { color:var(--status-warning); flex-shrink:0; }
+.alert-banner .txt { flex:1; }
+.alert-banner .txt strong { font-size:13.5px; font-weight:700; color:var(--text-default); }
+.alert-banner .txt p { font-size:12.5px; color:var(--text-sec); margin-top:2px; }
+
+/* ── Empty state ── */
+.empty-state { text-align:center; padding:60px 24px; color:var(--text-sec); }
+.empty-state svg { color:var(--text-subtle); margin-bottom:14px; }
+.empty-state h3 { font-size:15px; font-weight:700; color:var(--text-default); margin-bottom:6px; }
+.empty-state p { font-size:13px; }
+
+/* ── Tooltip ── */
+[data-tip] { position:relative; }
+[data-tip]:hover::after {
+  content:attr(data-tip); position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+  background:var(--p-slate-900); color:#fff; font-size:11px; font-weight:500; padding:6px 10px; border-radius:7px;
+  white-space:nowrap; z-index:50; box-shadow:var(--shadow-md);
+}
+body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-dark-border); }
+
+/* ── Toast ── */
+.toast-wrap { position:fixed; bottom:24px; right:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast {
+  display:flex; align-items:center; gap:10px; background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:var(--radius-md); padding:12px 16px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600;
+  animation: fadeUp .2s ease; min-width:220px;
+}
+.toast .ico { color:var(--brand-primary); }
+
+/* ── Responsive ── */
+@media (max-width: 880px) {
+  .tile-grid { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:1fr; }
+  .sidebar.visible { position:fixed; z-index:30; height:calc(100vh - 60px); box-shadow:var(--shadow-lg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ TOP BAR ══════════ -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="brand-name">Cloudhouse <span>Hub</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="org-chip"><span class="dot"></span> Northwind Ltd</div>
+    <button class="icon-btn" onclick="toggleTheme()" data-tip="Toggle theme" id="theme-btn">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="avatar">JD</div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- ══════════ SIDEBAR (Control Panel) ══════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-back" onclick="showView('portal')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Hub
+    </div>
+    <div class="sidebar-section-label">Identity &amp; Access</div>
+    <div class="sidebar-item" id="sb-cp-users" onclick="showView('cp-users')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Users
+    </div>
+    <div class="sidebar-item" id="sb-cp-roles" onclick="showView('cp-roles')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      Roles
+    </div>
+    <div class="sidebar-item" id="sb-cp-entitlements" onclick="showView('cp-entitlements')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
+      Entitlements
+    </div>
+    <div class="sidebar-item" id="sb-cp-audit" onclick="showView('cp-audit')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Audit log
+    </div>
+    <div class="sidebar-section-label">Tokens</div>
+    <div class="sidebar-item" id="sb-cp-tokens" onclick="showView('cp-tokens')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Balance
+    </div>
+    <div class="sidebar-item" id="sb-cp-statement" onclick="showView('cp-statement')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 14l3-3 3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Statement
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ══════════ PORTAL ══════════ -->
+    <div class="view active" id="v-portal">
+      <div class="portal-wrap">
+        <div class="portal-head">
+          <h1>Welcome back, Jane</h1>
+          <p>Choose an application to continue, or manage your organisation.</p>
+        </div>
+
+        <div class="scenario-bar">
+          <span class="lbl">Demo eligibility</span>
+          <div class="seg" id="scenario-seg">
+            <button class="active" data-s="multi"   onclick="setScenario('multi')">Multi-app + admin</button>
+            <button data-s="admin"   onclick="setScenario('admin')">Admin only</button>
+            <button data-s="single"  onclick="setScenario('single')">Single-app</button>
+            <button data-s="none"    onclick="setScenario('none')">No entitlement</button>
+            <button data-s="pending" onclick="setScenario('pending')">Pending invite</button>
+          </div>
+        </div>
+
+        <!-- tile grid -->
+        <div id="portal-tiles">
+          <div class="tile-grid" id="tile-grid"><!-- tiles injected by setScenario --></div>
+          <div id="portal-pending"></div>
+        </div>
+
+        <!-- single-app bypass notice -->
+        <div id="portal-single" style="display:none;">
+          <div class="notice info">
+            <div class="notice-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3>You'd normally skip the Hub</h3>
+              <p>You're entitled to exactly one application and aren't an org admin, so CloudhouseID routes you straight to <strong>Guardian</strong> after login. This screen is shown here only for the demo.</p>
+              <div class="acts"><button class="btn btn-primary" onclick="toast('Opening Guardian…')">Continue to Guardian →</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- no entitlement empty state -->
+        <div id="portal-none" style="display:none;">
+          <div class="notice empty">
+            <div class="notice-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h3>No applications available yet</h3>
+              <p>Your account doesn't have any active entitlements. Request access from your organisation admin, or start a trial.</p>
+              <div class="acts">
+                <button class="btn btn-primary" onclick="toast('Access request sent')">Request access</button>
+                <button class="btn btn-outline" onclick="toast('Starting trial…')">Start a trial</button>
+                <button class="btn btn-ghost" onclick="toast('Contacting support…')">Contact support</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · USERS ══════════ -->
+    <div class="view" id="v-cp-users">
+      <div class="page-pad">
+        <div class="page-head" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+          <div><div class="page-title">Users</div><div class="page-sub">Manage who can access your organisation's Cloudhouse applications.</div></div>
+          <button class="btn btn-primary" onclick="toast('Invite dialog (demo)')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Invite user
+          </button>
+        </div>
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="Search users…" oninput="filterTable('users-tbody', this.value, 0)">
+            </div>
+            <select class="select" onchange="filterStatus('users-tbody', this.value, 2)">
+              <option value="">All statuses</option>
+              <option value="Active">Active</option>
+              <option value="Suspended">Suspended</option>
+              <option value="Invited">Invited</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>User</th><th>Roles</th><th>Status</th><th>Last activity</th><th></th></tr></thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+          <div class="pager">
+            <div class="pager-info" id="users-pager-info">—</div>
+            <div class="pager-btns" id="users-pager-btns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · ROLES ══════════ -->
+    <div class="view" id="v-cp-roles">
+      <div class="page-pad">
+        <div class="page-head"><div class="page-title">Roles</div><div class="page-sub">Assign product-prefixed roles. CloudhouseID enforces RBAC across applications.</div></div>
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="Search users…" oninput="filterTable('roles-tbody', this.value, 0)">
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>User</th><th>Assigned roles</th><th>Effective permissions</th><th></th></tr></thead>
+            <tbody id="roles-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · ENTITLEMENTS ══════════ -->
+    <div class="view" id="v-cp-entitlements">
+      <div class="page-pad">
+        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Toggle which products your organisation can access. Per-user overrides apply in the Users tab.</div></div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>Product</th><th>Description</th><th>Seats in use</th><th style="text-align:right;">Org access</th></tr></thead>
+            <tbody id="ent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · AUDIT ══════════ -->
+    <div class="view" id="v-cp-audit">
+      <div class="page-pad">
+        <div class="page-head" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+          <div><div class="page-title">Audit log</div><div class="page-sub">Read-only record of administrative actions across your organisation.</div></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="exportData('audit','csv')">Export CSV</button>
+            <button class="btn btn-outline btn-sm" onclick="exportData('audit','json')">Export JSON</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="Filter by actor…" oninput="filterTable('audit-tbody', this.value, 0)">
+            </div>
+            <select class="select" onchange="filterStatus('audit-tbody', this.value, 3)">
+              <option value="">Any date</option>
+              <option value="Today">Today</option>
+              <option value="Yesterday">Yesterday</option>
+              <option value="This week">This week</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>Actor</th><th>Action</th><th>Target</th><th>When</th></tr></thead>
+            <tbody id="audit-tbody"></tbody>
+          </table>
+          <div class="pager">
+            <div class="pager-info" id="audit-pager-info">—</div>
+            <div class="pager-btns" id="audit-pager-btns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · TOKENS / BALANCE ══════════ -->
+    <div class="view" id="v-cp-tokens">
+      <div class="page-pad">
+        <div class="page-head"><div class="page-title">Token balance</div><div class="page-sub">Real-time view of your organisation's token currency across Cloudhouse products.</div></div>
+
+        <div class="alert-banner">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="txt"><strong>Balance running low</strong><p>At the current burn rate you'll run out in ~9 days. Top-up will be available in a future release.</p></div>
+          <button class="btn btn-outline btn-sm" data-tip="Purchasing arrives in a later phase" disabled>Buy tokens</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+          <div class="balance-card">
+            <div class="stat-label">Current balance</div>
+            <div class="stat-value">12,480</div>
+            <div class="stat-foot">Updated just now · as of 14:32 UTC</div>
+            <div class="balance-actions">
+              <button class="btn btn-light btn-sm" onclick="toast('Balance refreshed')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Refresh
+              </button>
+              <!-- payments-shaped hole: reserved purchase CTA -->
+              <button class="btn btn-light btn-sm" data-tip="Purchasing arrives in a later phase" disabled>Buy tokens</button>
+            </div>
+          </div>
+          <div class="stat-card"><div class="stat-label">Consumed (30d)</div><div class="stat-value">8,920</div><div class="stat-foot">↑ 12% vs previous 30d</div></div>
+          <div class="stat-card"><div class="stat-label">Daily burn (avg)</div><div class="stat-value">297</div><div class="stat-foot">Forecast empty in ~9 days</div></div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div class="section-label" style="margin:0;">Consumption by product (30 days)</div>
+          <button class="btn btn-outline btn-sm" onclick="showView('cp-statement')">View full statement →</button>
+        </div>
+        <div class="panel" style="padding:8px 0;">
+          <table class="tbl">
+            <thead><tr><th>Product</th><th>Operations</th><th>Tokens consumed</th><th style="width:220px;">Share</th></tr></thead>
+            <tbody id="byprod-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · STATEMENT ══════════ -->
+    <div class="view" id="v-cp-statement">
+      <div class="page-pad">
+        <div class="page-head" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+          <div><div class="page-title">Token statement</div><div class="page-sub">Per-operation line items with running balance. CloudhouseID is the authoritative ledger.</div></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="exportData('statement','csv')">Export CSV</button>
+            <button class="btn btn-outline btn-sm" onclick="exportData('statement','json')">Export JSON</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="Search operations / users…" oninput="filterTable('stmt-tbody', this.value)">
+            </div>
+            <select class="select" onchange="filterStatus('stmt-tbody', this.value, 1)">
+              <option value="">All products</option>
+              <option value="Guardian">Guardian</option>
+              <option value="Foundry Flow">Foundry Flow</option>
+            </select>
+            <select class="select" onchange="filterStatus('stmt-tbody', this.value, 4)">
+              <option value="">All users</option>
+              <option value="jane">jane.doe</option>
+              <option value="mark">mark.lee</option>
+              <option value="sara">sara.kim</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>Operation</th><th>Product</th><th>Qty</th><th>Tokens</th><th>User</th><th>When</th><th style="text-align:right;">Running balance</th></tr></thead>
+            <tbody id="stmt-tbody"></tbody>
+          </table>
+          <div class="pager">
+            <div class="pager-info" id="stmt-pager-info">—</div>
+            <div class="pager-btns" id="stmt-pager-btns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ════════════════ ROUTING ════════════════ */
+const ALL = ['portal','cp-users','cp-roles','cp-entitlements','cp-audit','cp-tokens','cp-statement'];
+const LABELS = {
+  'portal':'Hub', 'cp-users':'Users', 'cp-roles':'Roles', 'cp-entitlements':'Entitlements',
+  'cp-audit':'Audit log', 'cp-tokens':'Token balance', 'cp-statement':'Token statement'
+};
+const SB_MAP = { 'cp-users':'sb-cp-users','cp-roles':'sb-cp-roles','cp-entitlements':'sb-cp-entitlements','cp-audit':'sb-cp-audit','cp-tokens':'sb-cp-tokens','cp-statement':'sb-cp-statement' };
+
+function hideAll(){ ALL.forEach(id=>{ const el=document.getElementById('v-'+id); if(el) el.classList.remove('active'); }); }
+function showOnly(id){ hideAll(); const el=document.getElementById('v-'+id); if(el) el.classList.add('active'); }
+
+function showView(name){
+  const isPortal = name === 'portal';
+  document.getElementById('sidebar').classList.toggle('visible', !isPortal);
+  showOnly(name);
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  const sb = document.getElementById(SB_MAP[name]); if(sb) sb.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+  if(document.body.classList.contains('dark')) _syncInlineTheme(true);
+}
+
+/* ════════════════ PORTAL ELIGIBILITY ════════════════ */
+const TILES = {
+  guardian: { cls:'guardian', title:'Guardian', sub:'Security policy management & compliance drift detection.', icon:'<path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  foundry:  { cls:'foundry',  title:'Foundry Flow', sub:'Application packaging & conversion workflows.', icon:'<path d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4M20 7v10l-8 4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  cp:       { cls:'cp',       title:'Organisational Control Panel', sub:'Manage users, roles, entitlements & token balances.', icon:'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 6.8 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4 6.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a2 2 0 0 1 4 0v.1A1.7 1.7 0 0 0 17 4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' }
+};
+function tileHTML(key, opts){
+  opts = opts || {};
+  const t = TILES[key];
+  const target = key==='cp' ? "showView('cp-users')" : "toast('Opening "+t.title+"…')";
+  const tag = opts.pending ? '<div class="tile-tag pending">Pending</div>' : (opts.locked ? '<div class="tile-tag locked">Locked</div>' : '');
+  const disabled = opts.locked || opts.pending ? ' disabled' : '';
+  const click = (opts.locked||opts.pending) ? '' : ' onclick="'+target+'"';
+  const cta = opts.pending ? 'Invite pending' : (opts.locked ? 'No entitlement' : 'Open');
+  const newtab = (opts.locked||opts.pending) ? '' :
+    '<a class="tile-newtab" data-tip="Open in new tab" onclick="event.stopPropagation();toast(\'Opening in new tab…\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
+  return '<div class="tile'+(disabled?' disabled':'')+'"'+click+(opts.tip?' data-tip="'+opts.tip+'"':'')+'>'
+    + tag
+    + '<div class="tile-icon '+t.cls+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>'
+    + '<div><div class="tile-title">'+t.title+'</div><div class="tile-sub">'+t.sub+'</div></div>'
+    + '<div class="tile-foot"><span class="tile-cta">'+cta+(opts.locked||opts.pending?'':' <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')+'</span>'+newtab+'</div>'
+    + '</div>';
+}
+
+function setScenario(s){
+  document.querySelectorAll('#scenario-seg button').forEach(b=>b.classList.toggle('active', b.dataset.s===s));
+  const grid = document.getElementById('tile-grid');
+  const pending = document.getElementById('portal-pending');
+  const single = document.getElementById('portal-single');
+  const none = document.getElementById('portal-none');
+  grid.style.display='grid'; pending.innerHTML=''; single.style.display='none'; none.style.display='none';
+  document.getElementById('portal-tiles').style.display='block';
+
+  if(s==='multi'){
+    grid.innerHTML = tileHTML('guardian') + tileHTML('foundry') + tileHTML('cp');
+  } else if(s==='admin'){
+    grid.innerHTML = tileHTML('cp') + tileHTML('guardian',{locked:true,tip:'No entitlement — request access'}) + tileHTML('foundry',{locked:true,tip:'No entitlement — request access'});
+  } else if(s==='single'){
+    document.getElementById('portal-tiles').style.display='none';
+    single.style.display='block';
+  } else if(s==='none'){
+    document.getElementById('portal-tiles').style.display='none';
+    none.style.display='block';
+  } else if(s==='pending'){
+    grid.innerHTML = tileHTML('guardian');
+    pending.innerHTML = '<div class="section-label">Pending invitations</div><div class="tile-grid">'
+      + tileHTML('foundry',{pending:true,tip:'Invitation sent — awaiting acceptance'}) + '</div>';
+  }
+  if(document.body.classList.contains('dark')) _syncInlineTheme(true);
+}
+
+/* ════════════════ DATA ════════════════ */
+const USERS = [
+  ['jane.doe@northwind.com','Jane Doe',['cloudhouse:org-admin','guardian:admin'],'Active','2 min ago','JD'],
+  ['mark.lee@northwind.com','Mark Lee',['guardian:editor','foundry-flow:editor'],'Active','1 hour ago','ML'],
+  ['sara.kim@northwind.com','Sara Kim',['guardian:viewer'],'Active','Yesterday','SK'],
+  ['tom.wills@northwind.com','Tom Wills',['foundry-flow:admin'],'Suspended','3 weeks ago','TW'],
+  ['amy.cole@northwind.com','Amy Cole',['guardian:viewer','foundry-flow:viewer'],'Active','5 hours ago','AC'],
+  ['raj.patel@northwind.com','Raj Patel',[],'Invited','—','RP'],
+  ['liu.chen@northwind.com','Liu Chen',['guardian:editor'],'Active','2 days ago','LC'],
+  ['nora.faye@northwind.com','Nora Faye',['cloudhouse:org-admin'],'Active','30 min ago','NF'],
+  ['ivan.ko@northwind.com','Ivan Ko',['foundry-flow:editor'],'Active','4 days ago','IK'],
+  ['eva.sun@northwind.com','Eva Sun',['guardian:viewer'],'Suspended','2 months ago','ES'],
+  ['ben.ash@northwind.com','Ben Ash',[],'Invited','—','BA'],
+  ['mia.fox@northwind.com','Mia Fox',['guardian:admin','foundry-flow:viewer'],'Active','12 min ago','MF'],
+];
+const PERMS = {
+  'cloudhouse:org-admin':'Full org administration',
+  'guardian:admin':'Guardian: manage policies & nodes',
+  'guardian:editor':'Guardian: edit policies',
+  'guardian:viewer':'Guardian: read-only',
+  'foundry-flow:admin':'Foundry: full access',
+  'foundry-flow:editor':'Foundry: run conversions',
+  'foundry-flow:viewer':'Foundry: read-only',
+};
+const ENT = [
+  ['Guardian','Security policy management & compliance','9 / 25 seats',true,'guardian'],
+  ['Foundry Flow','Application packaging & conversion','6 / 15 seats',true,'foundry'],
+  ['Organisational Control Panel','Tenant administration','—',true,'cp'],
+  ['Argus Einstein','Predictive remediation (Labs)','—',false,'cp'],
+];
+const AUDIT = [
+  ['jane.doe','Assigned role guardian:admin','mia.fox@northwind.com','Today'],
+  ['jane.doe','Suspended user','tom.wills@northwind.com','Today'],
+  ['nora.faye','Invited user','raj.patel@northwind.com','Today'],
+  ['jane.doe','Enabled entitlement','Foundry Flow','Yesterday'],
+  ['nora.faye','Exported statement','statement-2026-06.csv','Yesterday'],
+  ['mark.lee','Reactivated user','eva.sun@northwind.com','Yesterday'],
+  ['jane.doe','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
+  ['nora.faye','Removed entitlement','Argus Einstein','This week'],
+  ['jane.doe','Invited user','ben.ash@northwind.com','This week'],
+  ['mark.lee','Changed role guardian:viewer → guardian:editor','liu.chen@northwind.com','This week'],
+  ['nora.faye','Refreshed token balance','—','This week'],
+  ['jane.doe','Suspended user','eva.sun@northwind.com','This week'],
+];
+const BYPROD = [
+  ['Guardian','3,210','5,140','#10B981',58],
+  ['Foundry Flow','842','3,480','#8B5CF6',39],
+  ['Control Panel','120','300','#6366F1',3],
+];
+let _bal = 12480;
+const STMT_OPS = [
+  ['Guardian: Full compliance scan','Guardian',1,180,'jane.doe','2 min ago'],
+  ['Foundry Flow: Convert MSI → MSIX','Foundry Flow',4,560,'mark.lee','18 min ago'],
+  ['Guardian: Policy dry-run','Guardian',1,40,'sara.kim','1 hour ago'],
+  ['Foundry Flow: Package validation','Foundry Flow',2,220,'mark.lee','2 hours ago'],
+  ['Guardian: Remediation apply','Guardian',6,720,'jane.doe','3 hours ago'],
+  ['Guardian: Full compliance scan','Guardian',1,180,'sara.kim','5 hours ago'],
+  ['Foundry Flow: Convert MSI → MSIX','Foundry Flow',3,420,'mark.lee','Yesterday'],
+  ['Guardian: Peer baseline compare','Guardian',1,90,'jane.doe','Yesterday'],
+  ['Foundry Flow: Bulk conversion','Foundry Flow',12,1680,'mark.lee','Yesterday'],
+  ['Guardian: Policy dry-run','Guardian',1,40,'sara.kim','2 days ago'],
+  ['Guardian: Remediation apply','Guardian',3,360,'jane.doe','2 days ago'],
+  ['Foundry Flow: Package validation','Foundry Flow',5,550,'mark.lee','3 days ago'],
+];
+
+/* ════════════════ RENDERERS ════════════════ */
+function statusBadge(s){ const m={'Active':'active','Suspended':'suspended','Invited':'invited'}; return '<span class="badge '+m[s]+'">'+s+'</span>'; }
+function rolesHTML(rs){ return rs.length ? rs.map(r=>'<span class="role-chip">'+r+'</span>').join('') : '<span class="muted">—</span>'; }
+function userCell(name,email,init){ return '<div class="cell-user"><div class="avatar">'+init+'</div><div><div class="nm">'+name+'</div><div class="em">'+email+'</div></div></div>'; }
+
+function renderUsers(){
+  document.getElementById('users-tbody').innerHTML = USERS.map(u=>{
+    const acts = u[3]==='Suspended'
+      ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'User reactivated\')">Reactivate</button>'
+      : (u[3]==='Invited' ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'Invite resent\')">Resend</button>'
+      : '<button class="btn btn-ghost btn-sm" onclick="toast(\'User suspended\')">Suspend</button>');
+    return '<tr><td>'+userCell(u[1],u[0],u[5])+'</td><td>'+rolesHTML(u[2])+'</td><td>'+statusBadge(u[3])+'</td><td class="muted">'+u[4]+'</td><td style="text-align:right;">'+acts+'</td></tr>';
+  }).join('');
+  paginate('users-tbody','users',7);
+}
+function renderRoles(){
+  document.getElementById('roles-tbody').innerHTML = USERS.filter(u=>u[2].length).map(u=>{
+    const perms = u[2].map(r=>PERMS[r]).filter(Boolean);
+    return '<tr><td>'+userCell(u[1],u[0],u[5])+'</td><td>'+rolesHTML(u[2])+'</td><td class="muted" style="font-size:12px;">'+perms.join(' · ')+'</td><td style="text-align:right;"><button class="btn btn-outline btn-sm" onclick="toast(\'Role editor (demo)\')">Edit</button></td></tr>';
+  }).join('');
+}
+function renderEnt(){
+  document.getElementById('ent-tbody').innerHTML = ENT.map((e,i)=>{
+    return '<tr><td><div style="display:flex;align-items:center;gap:10px;"><div class="tile-icon '+e[4]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+TILES[e[4]].icon+'</svg></div><span style="font-weight:600;">'+e[0]+'</span></div></td>'
+      + '<td class="muted">'+e[1]+'</td><td class="mono">'+e[2]+'</td>'
+      + '<td style="text-align:right;"><label class="switch" style="display:inline-block;"><input type="checkbox" '+(e[3]?'checked':'')+' onchange="toast(\''+e[0]+' '+'\'+(this.checked?\'enabled\':\'disabled\'))"><span class="track"></span></label></td></tr>';
+  }).join('');
+}
+function renderAudit(){
+  document.getElementById('audit-tbody').innerHTML = AUDIT.map(a=>{
+    const init = a[0].split('.').map(x=>x[0]).join('').toUpperCase();
+    return '<tr><td><div class="cell-user"><div class="avatar">'+init+'</div><div class="nm">'+a[0]+'</div></div></td><td>'+a[1]+'</td><td class="muted">'+a[2]+'</td><td class="muted">'+a[3]+'</td></tr>';
+  }).join('');
+  paginate('audit-tbody','audit',7);
+}
+function renderByProd(){
+  document.getElementById('byprod-tbody').innerHTML = BYPROD.map(b=>{
+    return '<tr><td><span style="display:inline-flex;align-items:center;gap:8px;font-weight:600;"><span style="width:9px;height:9px;border-radius:50%;background:'+b[3]+';"></span>'+b[0]+'</span></td>'
+      + '<td class="mono">'+b[1]+'</td><td class="mono" style="font-weight:600;">'+b[2]+'</td>'
+      + '<td><div style="height:8px;border-radius:6px;background:var(--bg-subtle);overflow:hidden;"><div style="height:100%;width:'+b[4]+'%;background:'+b[3]+';border-radius:6px;"></div></div></td></tr>';
+  }).join('');
+}
+function renderStmt(){
+  let bal = _bal;
+  document.getElementById('stmt-tbody').innerHTML = STMT_OPS.map(o=>{
+    const row = '<tr data-user="'+o[4].split('.')[0]+'"><td style="font-weight:600;">'+o[0]+'</td><td><span class="prod-chip">'+o[1]+'</span></td>'
+      + '<td class="mono">'+o[2]+'</td><td class="mono" style="color:var(--status-danger);font-weight:600;">−'+o[3]+'</td>'
+      + '<td class="muted">'+o[4]+'</td><td class="muted">'+o[5]+'</td><td class="mono" style="text-align:right;font-weight:600;">'+bal.toLocaleString()+'</td></tr>';
+    bal += o[3];
+    return row;
+  }).join('');
+  paginate('stmt-tbody','stmt',7);
+}
+
+/* ════════════════ TABLE UTILS ════════════════ */
+function filterTable(tbodyId, q, colIdx){
+  q = (q||'').toLowerCase();
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(tr=>{
+    const text = (colIdx!=null && tr.cells[colIdx]) ? tr.cells[colIdx].textContent : tr.textContent;
+    tr.dataset.hideSearch = (q && !text.toLowerCase().includes(q)) ? '1' : '';
+    applyRowVis(tr);
+  });
+  repaginate(tbodyId);
+}
+function filterStatus(tbodyId, val, colIdx){
+  colIdx = colIdx==null ? 3 : colIdx;
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(tr=>{
+    const cell = tr.cells[colIdx];
+    let match = !val;
+    if(val && cell){
+      if(tbodyId==='stmt-tbody' && colIdx===4){ match = (tr.dataset.user===val); }
+      else { match = cell.textContent.toLowerCase().includes(val.toLowerCase()); }
+    }
+    tr.dataset.hideFilter = match ? '' : '1';
+    applyRowVis(tr);
+  });
+  repaginate(tbodyId);
+}
+function applyRowVis(tr){ tr.dataset.filteredOut = (tr.dataset.hideSearch || tr.dataset.hideFilter) ? '1':''; }
+
+const PAGE = {};
+function paginate(tbodyId, key, size){ PAGE[tbodyId] = {key:key, size:size, page:1}; repaginate(tbodyId); }
+function repaginate(tbodyId){
+  const cfg = PAGE[tbodyId]; if(!cfg) return;
+  const rows = Array.from(document.querySelectorAll('#'+tbodyId+' tr')).filter(r=>!r.dataset.filteredOut);
+  const total = rows.length, pages = Math.max(1, Math.ceil(total/cfg.size));
+  if(cfg.page>pages) cfg.page=pages;
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{ r.style.display='none'; });
+  const start=(cfg.page-1)*cfg.size;
+  rows.slice(start,start+cfg.size).forEach(r=>r.style.display='');
+  const info=document.getElementById(cfg.key+'-pager-info');
+  if(info) info.textContent = total ? ('Showing '+(start+1)+'–'+Math.min(start+cfg.size,total)+' of '+total) : 'No results';
+  const btns=document.getElementById(cfg.key+'-pager-btns');
+  if(btns){
+    let h='<button '+(cfg.page<=1?'disabled':'')+' onclick="gotoPage(\''+tbodyId+'\','+(cfg.page-1)+')">‹</button>';
+    for(let p=1;p<=pages;p++){ h+='<button class="'+(p===cfg.page?'active':'')+'" onclick="gotoPage(\''+tbodyId+'\','+p+')">'+p+'</button>'; }
+    h+='<button '+(cfg.page>=pages?'disabled':'')+' onclick="gotoPage(\''+tbodyId+'\','+(cfg.page+1)+')">›</button>';
+    btns.innerHTML=h;
+  }
+}
+function gotoPage(tbodyId, p){ PAGE[tbodyId].page=p; repaginate(tbodyId); document.querySelector('.main').scrollTop=0; }
+
+/* ════════════════ EXPORT ════════════════ */
+function exportData(kind, fmt){
+  let rows, headers, name;
+  if(kind==='audit'){ headers=['actor','action','target','when']; rows=AUDIT; name='audit-log'; }
+  else { headers=['operation','product','qty','tokens','user','when']; rows=STMT_OPS; name='token-statement'; }
+  let blob, mime, ext;
+  if(fmt==='json'){ blob=JSON.stringify(rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]]))),null,2); mime='application/json'; ext='json'; }
+  else { blob=[headers.join(','),...rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(','))].join('\n'); mime='text/csv'; ext='csv'; }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([blob],{type:mime}));
+  a.download=name+'.'+ext; a.click(); URL.revokeObjectURL(a.href);
+  toast('Exported '+name+'.'+ext);
+}
+
+/* ════════════════ TOAST ════════════════ */
+function toast(msg){
+  const w=document.getElementById('toast-wrap');
+  const t=document.createElement('div'); t.className='toast';
+  t.innerHTML='<span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'+msg;
+  w.appendChild(t);
+  if(document.body.classList.contains('dark')) _syncInlineTheme(true);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2400);
+}
+
+/* ════════════════ DARK MODE ════════════════ */
+const _DK_BG='#141A2B', _DK_PAGE='#0B0F1A';
+function toggleTheme(){
+  const isDark = !document.body.classList.contains('dark');
+  document.body.classList.toggle('dark', isDark);
+  localStorage.setItem('hub-theme', isDark?'dark':'light');
+  _syncInlineTheme(isDark);
+}
+function _syncInlineTheme(isDark){
+  document.querySelectorAll('[style]').forEach(function(el){
+    if(isDark){
+      if(!el.hasAttribute('data-ls')) el.setAttribute('data-ls', el.getAttribute('style'));
+      var s=el.getAttribute('style');
+      s = s.replace(/background:\s*#fff(?![0-9a-f])/gi,'background:'+_DK_BG)
+           .replace(/background:\s*#ffffff\b/gi,'background:'+_DK_BG)
+           .replace(/background:\s*white\b/gi,'background:'+_DK_BG)
+           .replace(/background:\s*rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)/gi,'background:'+_DK_BG)
+           .replace(/background:\s*#F6F7FB\b/gi,'background:'+_DK_PAGE)
+           .replace(/background:\s*#EEF1F6\b/gi,'background:rgba(255,255,255,0.06)');
+      el.setAttribute('style',s);
+    } else {
+      var orig=el.getAttribute('data-ls');
+      if(orig!==null){ var d=el.style.display; el.setAttribute('style',orig); if(d) el.style.display=d; el.removeAttribute('data-ls'); }
+    }
+  });
+}
+
+/* ════════════════ INIT ════════════════ */
+(function(){
+  renderUsers(); renderRoles(); renderEnt(); renderAudit(); renderByProd(); renderStmt();
+  setScenario('multi');
+  if(localStorage.getItem('hub-theme')==='dark'){
+    document.body.classList.add('dark');
+    _syncInlineTheme(true);
+  }
+})();
+</script>
+</body>
+</html>
