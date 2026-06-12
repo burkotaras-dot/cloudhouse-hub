@@ -173,6 +173,7 @@ body {
 .brand-logo { height: 17px; width:auto; display:block; }
 .brand-name { font-size:17px; font-weight:800; letter-spacing:-0.3px; color:var(--text-default); }
 .topbar-right { display:flex; align-items:center; gap:14px; }
+.topbar-user { font-size:13px; font-weight:600; color:var(--text-default); }
 .icon-btn {
   width:34px; height:34px; border-radius:9px; border:1px solid var(--border-default);
   background:var(--bg-surface); color:var(--text-sec); cursor:pointer;
@@ -183,8 +184,26 @@ body {
   width:34px; height:34px; border-radius:50%;
   background:linear-gradient(135deg,#516470,#0D2839);
   color:#fff; font-size:12px; font-weight:700;
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
 }
+.avatar-wrap { position:relative; }
+.avatar-menu {
+  display:none; position:absolute; top:calc(100% + 10px); right:0;
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); min-width:224px; z-index:100;
+}
+.avatar-menu.open { display:block; }
+.avatar-menu-head { padding:14px 16px; }
+.avatar-menu-name { font-size:13px; font-weight:700; color:var(--text-default); }
+.avatar-menu-email { font-size:11.5px; color:var(--text-sec); margin-top:2px; }
+.avatar-menu-divider { height:1px; background:var(--border-subtle); margin:2px 0; }
+.avatar-menu-item {
+  display:flex; align-items:center; gap:10px; padding:10px 16px;
+  font-size:13px; font-weight:600; color:var(--text-default); cursor:pointer;
+  transition:background .12s;
+}
+.avatar-menu-item:hover { background:var(--bg-subtle); color:var(--accent-text); }
+.avatar-menu-item.danger:hover { color:var(--status-danger); background:rgba(251,60,68,0.06); }
 
 /* ── Shell ── */
 .shell { display:flex; height: calc(100vh - 60px); }
@@ -283,8 +302,7 @@ body.dark .portal-glow {
 .portal-head p { font-size:14px; color:var(--text-sec); margin-top:8px; }
 
 .scenario-bar {
-  display:flex; align-items:center; gap:8px; justify-content:center;
-  margin-bottom: 28px; flex-wrap:wrap;
+  display:none; align-items:center; gap:8px; justify-content:center; flex:1;
 }
 .scenario-bar .lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-right:4px; }
 .seg {
@@ -298,29 +316,30 @@ body.dark .portal-glow {
 }
 .seg button.active { background:var(--bg-surface); color:var(--accent-text); box-shadow:var(--shadow-sm); }
 
-.tile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.tile-grid { display:grid; gap:20px; width:100%; margin:0 auto; }
 .tile {
   background:var(--bg-surface); border:1px solid var(--border-default);
   border-radius:var(--radius-lg); padding:24px 22px 18px; cursor:pointer;
   transition: transform .18s, box-shadow .18s, border-color .18s;
-  position:relative; overflow:hidden; display:flex; flex-direction:column; gap:13px;
+  position:relative; display:flex; flex-direction:column; gap:13px;
   box-shadow:var(--shadow-md);
 }
 .tile > * { position:relative; z-index:1; }
-.tile::before { /* brand accent line */
-  content:''; position:absolute; left:0; right:0; top:0; height:3px; z-index:1;
-  background:var(--tile-accent,transparent);
-}
-.tile::after { /* soft brand tint, top area */
+.tile::before { /* brand accent line + soft top tint (single pseudo, ::after reserved for tooltip) */
   content:''; position:absolute; left:0; right:0; top:0; height:84px; z-index:0;
-  background:linear-gradient(180deg, var(--tile-tint,transparent), transparent);
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  background:
+    linear-gradient(var(--tile-accent,transparent), var(--tile-accent,transparent)) top/100% 3px no-repeat,
+    linear-gradient(180deg, var(--tile-tint,transparent), transparent);
   pointer-events:none;
 }
-.tile-guardian { --tile-accent:#1FC774; --tile-tint:rgba(31,199,116,0.07); }
-.tile-foundry  { --tile-accent:#F97316; --tile-tint:rgba(249,115,22,0.07); }
-.tile-cp       { --tile-accent:#2A4251; --tile-tint:rgba(42,66,81,0.06); }
+.tile-guardian       { --tile-accent:#1FC774; --tile-tint:rgba(31,199,116,0.07); }
+.tile-foundry        { --tile-accent:#F97316; --tile-tint:rgba(249,115,22,0.07); }
+.tile-foundry-studio { --tile-accent:#2563EB; --tile-tint:rgba(37,99,235,0.07); }
+.tile-cp             { --tile-accent:#2A4251; --tile-tint:rgba(42,66,81,0.06); }
 .tile:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--brand-soft-bd); }
-.tile.disabled { opacity:.5; cursor:not-allowed; }
+.tile.disabled { cursor:not-allowed; }
+.tile.disabled > * { opacity:.5; } /* dim content only, keep tooltip (::after) crisp */
 .tile.disabled:hover { transform:none; box-shadow:var(--shadow-md); border-color:var(--border-default); }
 .tile-icon {
   width:48px; height:48px; border-radius:13px; display:flex; align-items:center; justify-content:center; color:#fff;
@@ -342,7 +361,30 @@ body.dark .portal-glow {
 .tile-tag.pending { background:rgba(245,158,11,0.12); color:var(--status-warning); border:1px solid rgba(245,158,11,0.3); }
 .tile-tag.locked  { background:var(--bg-subtle); color:var(--text-subtle); border:1px solid var(--border-default); }
 
+/* ── Administration strip (Control Panel — governance, not a product) ── */
+#portal-admin { max-width:740px; margin-left:auto; margin-right:auto; } /* match 2-card centred block (2×360 + 20 gap) */
+.admin-strip {
+  display:flex; align-items:center; gap:18px;
+  background:var(--bg-subtle); border:1px solid var(--border-default);
+  border-radius:var(--radius-lg); padding:16px 20px; cursor:pointer;
+  transition: transform .18s, box-shadow .18s, border-color .18s; box-shadow:var(--shadow-sm);
+}
+.admin-strip:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--brand-soft-bd); }
+.admin-ico {
+  width:44px; height:44px; border-radius:12px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; color:#fff;
+  background:linear-gradient(135deg,#2A4251,#0D2839); box-shadow:0 4px 12px rgba(17,21,31,0.12), inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.admin-txt { flex:1 1 auto; min-width:0; }
+.admin-title { font-size:15px; font-weight:800; letter-spacing:-0.2px; display:flex; align-items:center; gap:9px; }
+.admin-role { font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#2A4251; background:rgba(42,66,81,0.10); border:1px solid rgba(42,66,81,0.28); padding:2px 7px; border-radius:999px; }
+body.dark .admin-role { color:#AEBEC8; background:rgba(122,137,146,0.16); border-color:rgba(122,137,146,0.34); }
+.admin-sub { font-size:12.5px; color:var(--text-sec); margin-top:3px; }
+.admin-cta { flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--accent-text); padding:8px 14px; border:1px solid var(--border-default); border-radius:9px; background:var(--bg-surface); }
+.admin-strip:hover .admin-cta { border-color:var(--brand-soft-bd); }
+@media (max-width:560px){ .admin-strip{flex-wrap:wrap;} .admin-cta{width:100%; justify-content:center;} }
+
 .section-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin:30px 0 14px; }
+#portal-pending .section-label { text-align:center; }
 
 .notice {
   display:flex; gap:14px; align-items:flex-start;
@@ -537,11 +579,36 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
     <img class="brand-logo" src="Cloudhouse.png" alt="Cloudhouse">
     <div class="brand-name">Hub</div>
   </div>
+  <div class="scenario-bar" id="scenario-bar">
+    <span class="lbl">Demo eligibility</span>
+    <div class="seg" id="scenario-seg">
+      <button class="active" data-s="multi"   onclick="setScenario('multi')">Multi-app + admin</button>
+      <button data-s="admin"   onclick="setScenario('admin')">Admin only</button>
+      <button data-s="single"  onclick="setScenario('single')">Single-app</button>
+      <button data-s="none"    onclick="setScenario('none')">No entitlement</button>
+      <button data-s="pending" onclick="setScenario('pending')">Pending invite</button>
+    </div>
+  </div>
   <div class="topbar-right">
     <button class="icon-btn" onclick="toggleTheme()" data-tip="Toggle theme" id="theme-btn">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
     </button>
-    <div class="avatar">JD</div>
+    <span class="topbar-user">Paul Fisher</span>
+    <div class="avatar-wrap" id="avatar-wrap">
+      <div class="avatar" onclick="toggleAvatarMenu()">PF</div>
+      <div class="avatar-menu" id="avatar-menu">
+        <div class="avatar-menu-divider" style="margin:0"></div>
+        <div class="avatar-menu-item" onclick="showView('cp-overview');closeAvatarMenu()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 6.8 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4 6.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a2 2 0 0 1 4 0v.1A1.7 1.7 0 0 0 17 4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          Manage organisation
+        </div>
+        <div class="avatar-menu-divider"></div>
+        <div class="avatar-menu-item danger" onclick="toast('Sign out…');closeAvatarMenu()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sign out
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -592,19 +659,8 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
       <canvas class="portal-dots" id="portal-dots"></canvas>
       <div class="portal-wrap">
         <div class="portal-head">
-          <h1>Welcome back, Jane</h1>
+          <h1>Welcome back, Paul</h1>
           <p>Choose an application to continue, or manage your organisation.</p>
-        </div>
-
-        <div class="scenario-bar">
-          <span class="lbl">Demo eligibility</span>
-          <div class="seg" id="scenario-seg">
-            <button class="active" data-s="multi"   onclick="setScenario('multi')">Multi-app + admin</button>
-            <button data-s="admin"   onclick="setScenario('admin')">Admin only</button>
-            <button data-s="single"  onclick="setScenario('single')">Single-app</button>
-            <button data-s="none"    onclick="setScenario('none')">No entitlement</button>
-            <button data-s="pending" onclick="setScenario('pending')">Pending invite</button>
-          </div>
         </div>
 
         <!-- tile grid -->
@@ -902,6 +958,7 @@ function showOnly(id){ hideAll(); const el=document.getElementById('v-'+id); if(
 function showView(name){
   const isPortal = name === 'portal';
   document.getElementById('sidebar').classList.toggle('visible', !isPortal);
+  document.getElementById('scenario-bar').style.display = isPortal ? 'flex' : 'none';
   showOnly(name);
   document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
   const sb = document.getElementById(SB_MAP[name]); if(sb) sb.classList.add('active');
@@ -913,6 +970,7 @@ function showView(name){
 const TILES = {
   guardian: { cls:'guardian', title:'Guardian', sub:'Security policy management & compliance drift detection.', img:'Guardian.png', icon:'<path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
   foundry:  { cls:'foundry',  title:'Foundry Flow', sub:'Application packaging & conversion workflows.', img:'Foundry Flow.png', icon:'<path d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4M20 7v10l-8 4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  'foundry-studio': { cls:'foundry-studio', title:'Foundry Studio', sub:'Package setup, workflow configuration & task management.', img:'Foundry Studio.png', icon:'<path d="M2 20h20M4 20V10l8-8 8 8v10M10 20v-6h4v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
   cp:       { cls:'cp',       title:'Organisational Control Panel', sub:'Manage users, roles, entitlements & token balances.', icon:'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 6.8 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4 6.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a2 2 0 0 1 4 0v.1A1.7 1.7 0 0 0 17 4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' }
 };
 function tileHTML(key, opts){
@@ -933,6 +991,24 @@ function tileHTML(key, opts){
     + '</div>';
 }
 
+function toggleAvatarMenu(){ document.getElementById('avatar-menu').classList.toggle('open'); }
+function closeAvatarMenu(){ document.getElementById('avatar-menu').classList.remove('open'); }
+document.addEventListener('click', function(e){ if(!document.getElementById('avatar-wrap').contains(e.target)) closeAvatarMenu(); });
+
+function adminStripHTML(){
+  const t = TILES.cp;
+  return '<div class="section-label">Administration</div>'
+    + '<div class="admin-strip" onclick="showView(\'cp-overview\')">'
+    + '<div class="admin-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>'
+    + '<div class="admin-txt"><div class="admin-title">'+t.title+' <span class="admin-role">Org admin</span></div>'
+    + '<div class="admin-sub">'+t.sub+'</div></div>'
+    + '<span class="admin-cta">Manage <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
+    + '</div>';
+}
+function setGridCols(el, count){
+  el.style.gridTemplateColumns = 'repeat('+count+', minmax(0,1fr))';
+  el.style.maxWidth = (count * 260 + (count-1) * 20) + 'px';
+}
 function setScenario(s){
   document.querySelectorAll('#scenario-seg button').forEach(b=>b.classList.toggle('active', b.dataset.s===s));
   const grid = document.getElementById('tile-grid');
@@ -943,9 +1019,11 @@ function setScenario(s){
   document.getElementById('portal-tiles').style.display='block';
 
   if(s==='multi'){
-    grid.innerHTML = tileHTML('guardian') + tileHTML('foundry') + tileHTML('cp');
+    grid.innerHTML = tileHTML('guardian') + tileHTML('foundry') + tileHTML('foundry-studio');
+    setGridCols(grid, 3);
   } else if(s==='admin'){
-    grid.innerHTML = tileHTML('cp') + tileHTML('guardian',{locked:true,tip:'No entitlement — request access'}) + tileHTML('foundry',{locked:true,tip:'No entitlement — request access'});
+    grid.innerHTML = tileHTML('guardian',{locked:true,tip:'No entitlement — request access'}) + tileHTML('foundry',{locked:true,tip:'No entitlement — request access'}) + tileHTML('foundry-studio',{locked:true,tip:'No entitlement — request access'});
+    setGridCols(grid, 3);
   } else if(s==='single'){
     document.getElementById('portal-tiles').style.display='none';
     single.style.display='block';
@@ -954,15 +1032,18 @@ function setScenario(s){
     none.style.display='block';
   } else if(s==='pending'){
     grid.innerHTML = tileHTML('guardian');
-    pending.innerHTML = '<div class="section-label">Pending invitations</div><div class="tile-grid">'
-      + tileHTML('foundry',{pending:true,tip:'Invitation sent — awaiting acceptance'}) + '</div>';
+    setGridCols(grid, 1);
+    pending.innerHTML = '<div class="section-label">Pending invitations</div>'
+      + '<div class="tile-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:540px">'
+      + tileHTML('foundry',{pending:true,tip:'Invitation sent — awaiting acceptance'})
+      + tileHTML('foundry-studio',{locked:true,tip:'No entitlement — request access'}) + '</div>';
   }
   if(document.body.classList.contains('dark')) _syncInlineTheme(true);
 }
 
 /* ════════════════ DATA ════════════════ */
 const USERS = [
-  ['jane.doe@northwind.com','Jane Doe',['cloudhouse:org-admin','guardian:admin'],'Active','2 min ago','JD'],
+  ['paul.fisher@northwind.com','Paul Fisher',['cloudhouse:org-admin','guardian:admin'],'Active','2 min ago','PF'],
   ['mark.lee@northwind.com','Mark Lee',['guardian:editor','foundry-flow:editor'],'Active','1 hour ago','ML'],
   ['sara.kim@northwind.com','Sara Kim',['guardian:viewer'],'Active','Yesterday','SK'],
   ['tom.wills@northwind.com','Tom Wills',['foundry-flow:admin'],'Suspended','3 weeks ago','TW'],
@@ -991,18 +1072,18 @@ const ENT = [
   ['Argus Einstein','Predictive remediation (Labs)','—',false,'cp'],
 ];
 const AUDIT = [
-  ['jane.doe','Assigned role guardian:admin','mia.fox@northwind.com','Today'],
-  ['jane.doe','Suspended user','tom.wills@northwind.com','Today'],
+  ['paul.fisher','Assigned role guardian:admin','mia.fox@northwind.com','Today'],
+  ['paul.fisher','Suspended user','tom.wills@northwind.com','Today'],
   ['nora.faye','Invited user','raj.patel@northwind.com','Today'],
-  ['jane.doe','Enabled entitlement','Foundry Flow','Yesterday'],
+  ['paul.fisher','Enabled entitlement','Foundry Flow','Yesterday'],
   ['nora.faye','Exported statement','statement-2026-06.csv','Yesterday'],
   ['mark.lee','Reactivated user','eva.sun@northwind.com','Yesterday'],
-  ['jane.doe','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
+  ['paul.fisher','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
   ['nora.faye','Removed entitlement','Argus Einstein','This week'],
-  ['jane.doe','Invited user','ben.ash@northwind.com','This week'],
+  ['paul.fisher','Invited user','ben.ash@northwind.com','This week'],
   ['mark.lee','Changed role guardian:viewer → guardian:editor','liu.chen@northwind.com','This week'],
   ['nora.faye','Refreshed token balance','—','This week'],
-  ['jane.doe','Suspended user','eva.sun@northwind.com','This week'],
+  ['paul.fisher','Suspended user','eva.sun@northwind.com','This week'],
 ];
 const BYPROD = [
   ['Guardian','3,210','5,140','#1FC774',58],
@@ -1011,17 +1092,17 @@ const BYPROD = [
 ];
 let _bal = 12480;
 const STMT_OPS = [
-  ['Guardian: Full compliance scan','Guardian',1,180,'jane.doe','2 min ago'],
+  ['Guardian: Full compliance scan','Guardian',1,180,'paul.fisher','2 min ago'],
   ['Foundry Flow: Convert MSI → MSIX','Foundry Flow',4,560,'mark.lee','18 min ago'],
   ['Guardian: Policy dry-run','Guardian',1,40,'sara.kim','1 hour ago'],
   ['Foundry Flow: Package validation','Foundry Flow',2,220,'mark.lee','2 hours ago'],
-  ['Guardian: Remediation apply','Guardian',6,720,'jane.doe','3 hours ago'],
+  ['Guardian: Remediation apply','Guardian',6,720,'paul.fisher','3 hours ago'],
   ['Guardian: Full compliance scan','Guardian',1,180,'sara.kim','5 hours ago'],
   ['Foundry Flow: Convert MSI → MSIX','Foundry Flow',3,420,'mark.lee','Yesterday'],
-  ['Guardian: Peer baseline compare','Guardian',1,90,'jane.doe','Yesterday'],
+  ['Guardian: Peer baseline compare','Guardian',1,90,'paul.fisher','Yesterday'],
   ['Foundry Flow: Bulk conversion','Foundry Flow',12,1680,'mark.lee','Yesterday'],
   ['Guardian: Policy dry-run','Guardian',1,40,'sara.kim','2 days ago'],
-  ['Guardian: Remediation apply','Guardian',3,360,'jane.doe','2 days ago'],
+  ['Guardian: Remediation apply','Guardian',3,360,'paul.fisher','2 days ago'],
   ['Foundry Flow: Package validation','Foundry Flow',5,550,'mark.lee','3 days ago'],
 ];
 
@@ -1247,6 +1328,7 @@ function _syncInlineTheme(isDark){
 (function(){
   renderUsers(); renderRoles(); renderEnt(); renderAudit(); renderByProd(); renderStmt();
   setScenario('multi');
+  document.getElementById('scenario-bar').style.display = 'flex';
   if(localStorage.getItem('hub-theme')==='dark'){
     document.body.classList.add('dark');
     _syncInlineTheme(true);
