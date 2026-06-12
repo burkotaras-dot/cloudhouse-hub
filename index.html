@@ -11,20 +11,34 @@
 
 :root {
   /* ═══════════════════════════════════════════════════════
-     PRIMITIVE SCALE — Hub's own palette (indigo on slate)
+     PRIMITIVE SCALE — Hub palette: Navy (brand) + Green (accent)
+     Neutrals inherited from Guardian Slate (do not touch)
      ═══════════════════════════════════════════════════════ */
-  /* Indigo (brand) */
-  --p-indigo-50:  #EEF0FF;
-  --p-indigo-100: #E0E3FF;
-  --p-indigo-200: #C4C9FF;
-  --p-indigo-300: #A5ABFF;
-  --p-indigo-400: #818CF8;
-  --p-indigo-500: #6366F1;
-  --p-indigo-600: #4F46E5;
-  --p-indigo-700: #4338CA;
-  --p-indigo-800: #3730A3;
+  /* Navy — Primary / Brand (base #0D2839) */
+  --p-navy-0: #ECEEEF;
+  --p-navy-1: #CAD0D3;
+  --p-navy-2: #A3ADB4;
+  --p-navy-3: #7A8992;
+  --p-navy-4: #516470;
+  --p-navy-5: #2A4251;
+  --p-navy-6: #0D2839;  /* base */
+  --p-navy-7: #0B2230;
+  --p-navy-8: #091C28;
+  --p-navy-9: #07161F;
 
-  /* Slate (neutral) */
+  /* Green — Accent / Action (base #1FC774) — the single accent */
+  --p-green-0: #EDFBF4;
+  --p-green-1: #CEF3E0;
+  --p-green-2: #AAEACA;
+  --p-green-3: #84E0B3;
+  --p-green-4: #5ED79B;
+  --p-green-5: #3ACE85;
+  --p-green-6: #1FC774;  /* base — icons, borders, active states */
+  --p-green-7: #1AA963;
+  --p-green-8: #168B51;  /* hover */
+  --p-green-9: #116D40;  /* buttons with white text (AA) */
+
+  /* Slate (neutral) — inherited from Guardian */
   --p-slate-0:   #FFFFFF;
   --p-slate-50:  #F6F7FB;
   --p-slate-100: #EEF1F6;
@@ -37,27 +51,19 @@
   --p-slate-800: #1E2435;
   --p-slate-900: #11151F;
 
-  /* Dark surfaces (indigo-tinted) */
-  --p-dark-canvas:        #0B0F1A;
-  --p-dark-surface:       #141A2B;
-  --p-dark-surface-raised:#1A2236;
-  --p-dark-subtle:        #10162455;
-  --p-dark-border:        #232B40;
-  --p-dark-border-strong: #323D58;
+  /* Dark surfaces (navy-tinted) */
+  --p-dark-canvas:        #07161F;
+  --p-dark-surface:       #0B2230;
+  --p-dark-surface-raised:#0E2A3A;
+  --p-dark-subtle:        #0B223055;
+  --p-dark-border:        #1C3645;
+  --p-dark-border-strong: #2A4251;
 
-  /* Status */
-  --p-green-400: #34D399;
-  --p-green-500: #10B981;
-  --p-green-600: #059669;
+  /* Status primitives (warning/danger inherited from Guardian) */
   --p-amber-400: #FBBF24;
   --p-amber-500: #F59E0B;
-  --p-amber-600: #D97706;
-  --p-red-400:   #F87171;
-  --p-red-500:   #EF4444;
-  --p-red-600:   #DC2626;
-  --p-blue-500:  #3B82F6;
+  --p-red-500:   #FB3C44;
   --p-violet-500:#8B5CF6;
-  --p-teal-500:  #14B8A6;
 
   /* ═══════════════════════════════════════════════════════
      SEMANTIC TOKENS — LIGHT
@@ -76,17 +82,23 @@
   --border-default: #E2E6EE;
   --border-subtle:  #EEF1F6;
   --border-strong:  #CBD2DE;
-  --border-focus:   #6366F1;
+  --border-focus:   #1FC774;
 
-  --brand-primary: #4F46E5;
-  --brand-hover:   #4338CA;
-  --brand-soft:    rgba(79,70,229,0.08);
-  --brand-soft-bd: rgba(79,70,229,0.20);
+  /* Brand = Navy */
+  --brand-navy:    #0D2839;  /* brand-primary alias */
+  --brand-navy-hi: #2A4251;  /* brand-hover alias */
+  /* Accent / Action = Green (the single accent) */
+  --brand-primary: #116D40;  /* action — filled buttons w/ white text (AA) */
+  --brand-hover:   #168B51;  /* action-hover */
+  --accent-bright: #1FC774;  /* action-bright — icons, borders, nav, active, dots */
+  --accent-text:   #116D40;  /* readable green text on light */
+  --brand-soft:    rgba(31,199,116,0.10);
+  --brand-soft-bd: rgba(31,199,116,0.28);
 
-  --status-success: #059669;
-  --status-warning: #D97706;
-  --status-danger:  #DC2626;
-  --status-info:    #3B82F6;
+  --status-success: #116D40;
+  --status-warning: #F59E0B;
+  --status-danger:  #FB3C44;
+  --status-info:    #2A4251;
 
   --shadow-sm: 0 1px 3px rgba(17,21,31,0.06), 0 1px 2px rgba(17,21,31,0.04);
   --shadow-md: 0 6px 20px rgba(17,21,31,0.08), 0 2px 6px rgba(17,21,31,0.04);
@@ -119,11 +131,13 @@ body.dark {
   --bg-elevated: var(--p-dark-surface-raised);
 
   --border-default: var(--p-dark-border);
-  --border-subtle:  #1A2133;
+  --border-subtle:  #122A38;
   --border-strong:  var(--p-dark-border-strong);
 
-  --brand-soft:    rgba(99,102,241,0.16);
-  --brand-soft-bd: rgba(99,102,241,0.35);
+  --accent-text:   #5ED79B;  /* brighter green text for dark surfaces */
+  --status-info:   #7A8992;  /* navy/3 — info on dark */
+  --brand-soft:    rgba(31,199,116,0.16);
+  --brand-soft-bd: rgba(31,199,116,0.38);
 
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.5);
   --shadow-md: 0 6px 24px rgba(0,0,0,0.55);
@@ -155,32 +169,19 @@ body {
   position: relative;
   z-index: 20;
 }
-.brand { display:flex; align-items:center; gap:11px; }
-.brand-mark {
-  width: 32px; height: 32px; border-radius: 9px;
-  background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
-  display:flex; align-items:center; justify-content:center;
-  color:#fff; box-shadow: 0 2px 8px rgba(79,70,229,0.35);
-}
-.brand-name { font-size:15px; font-weight:800; letter-spacing:-0.3px; color:var(--text-default); }
-.brand-name span { color: var(--brand-primary); }
+.brand { display:flex; align-items:center; gap:9px; }
+.brand-logo { height: 17px; width:auto; display:block; }
+.brand-name { font-size:17px; font-weight:800; letter-spacing:-0.3px; color:var(--text-default); }
 .topbar-right { display:flex; align-items:center; gap:14px; }
-.org-chip {
-  display:flex; align-items:center; gap:8px;
-  font-size:12px; font-weight:600; color:var(--text-sec);
-  background: var(--bg-subtle); border:1px solid var(--border-default);
-  padding:6px 12px; border-radius:20px;
-}
-.org-chip .dot { width:7px; height:7px; border-radius:50%; background:var(--p-green-500); }
 .icon-btn {
   width:34px; height:34px; border-radius:9px; border:1px solid var(--border-default);
   background:var(--bg-surface); color:var(--text-sec); cursor:pointer;
   display:flex; align-items:center; justify-content:center; transition:all .15s;
 }
-.icon-btn:hover { border-color:var(--brand-soft-bd); color:var(--brand-primary); }
+.icon-btn:hover { border-color:var(--brand-soft-bd); color:var(--accent-text); }
 .avatar {
   width:34px; height:34px; border-radius:50%;
-  background:linear-gradient(135deg,#818CF8,#4F46E5);
+  background:linear-gradient(135deg,#516470,#0D2839);
   color:#fff; font-size:12px; font-weight:700;
   display:flex; align-items:center; justify-content:center;
 }
@@ -219,7 +220,7 @@ body {
 }
 .sidebar-item:hover { background:var(--bg-subtle); color:var(--text-default); }
 .sidebar-item.active {
-  background: var(--brand-soft); color: var(--brand-primary);
+  background: var(--brand-soft); color: var(--accent-text);
   border-color: var(--brand-soft-bd);
 }
 .sidebar-item svg { flex-shrink:0; }
@@ -228,6 +229,7 @@ body {
 .main { flex:1; overflow-y:auto; min-width:0; background:var(--bg-canvas); }
 .view { display:none; flex-direction:column; min-height:100%; animation: fadeUp .22s ease; }
 .view.active { display:flex; }
+#v-portal { justify-content:center; padding-bottom:14vh; }
 @keyframes fadeUp { from { opacity:0; transform:translateY(6px);} to {opacity:1; transform:none;} }
 
 .page-pad { padding: 28px 32px; }
@@ -255,7 +257,7 @@ body {
   font-size:12px; font-weight:600; color:var(--text-sec);
   padding:6px 12px; border-radius:7px; transition:all .15s; font-family:inherit;
 }
-.seg button.active { background:var(--bg-surface); color:var(--brand-primary); box-shadow:var(--shadow-sm); }
+.seg button.active { background:var(--bg-surface); color:var(--accent-text); box-shadow:var(--shadow-sm); }
 
 .tile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
 .tile {
@@ -270,20 +272,20 @@ body {
 .tile-icon {
   width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff;
 }
-.tile-icon.guardian { background:linear-gradient(135deg,#10B981,#059669); }
+.tile-icon.guardian { background:linear-gradient(135deg,#1FC774,#116D40); }
 .tile-icon.foundry  { background:linear-gradient(135deg,#8B5CF6,#6D28D9); }
-.tile-icon.cp       { background:linear-gradient(135deg,#6366F1,#4338CA); }
+.tile-icon.cp       { background:linear-gradient(135deg,#2A4251,#0D2839); }
 .tile-title { font-size:15px; font-weight:700; }
 .tile-sub { font-size:12.5px; color:var(--text-sec); line-height:1.5; }
 .tile-foot { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
-.tile-cta { font-size:12.5px; font-weight:700; color:var(--brand-primary); display:flex; align-items:center; gap:5px; }
+.tile-cta { font-size:12.5px; font-weight:700; color:var(--accent-text); display:flex; align-items:center; gap:5px; }
 .tile-newtab { color:var(--text-subtle); display:flex; }
-.tile-newtab:hover { color:var(--brand-primary); }
+.tile-newtab:hover { color:var(--accent-text); }
 .tile-tag {
   position:absolute; top:14px; right:14px; font-size:10px; font-weight:700;
   text-transform:uppercase; letter-spacing:.4px; padding:3px 8px; border-radius:20px;
 }
-.tile-tag.pending { background:rgba(217,119,6,0.12); color:var(--status-warning); border:1px solid rgba(217,119,6,0.3); }
+.tile-tag.pending { background:rgba(245,158,11,0.12); color:var(--status-warning); border:1px solid rgba(245,158,11,0.3); }
 .tile-tag.locked  { background:var(--bg-subtle); color:var(--text-subtle); border:1px solid var(--border-default); }
 
 .section-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin:30px 0 14px; }
@@ -294,8 +296,8 @@ body {
   border-radius:var(--radius-lg); padding:22px 24px; box-shadow:var(--shadow-sm);
 }
 .notice-icon { width:42px; height:42px; border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-.notice.info .notice-icon  { background:var(--brand-soft); color:var(--brand-primary); }
-.notice.warn .notice-icon  { background:rgba(217,119,6,0.12); color:var(--status-warning); }
+.notice.info .notice-icon  { background:rgba(42,66,81,0.10); color:var(--status-info); }
+.notice.warn .notice-icon  { background:rgba(245,158,11,0.12); color:var(--status-warning); }
 .notice.empty .notice-icon { background:var(--bg-subtle); color:var(--text-subtle); }
 .notice h3 { font-size:15px; font-weight:700; margin-bottom:5px; }
 .notice p { font-size:13px; color:var(--text-sec); line-height:1.55; }
@@ -307,10 +309,10 @@ body {
   font-family:inherit; font-size:13px; font-weight:600; border-radius:9px;
   padding:9px 16px; border:1px solid transparent; transition:all .15s; white-space:nowrap;
 }
-.btn-primary { background:var(--brand-primary); color:#fff; box-shadow:0 2px 8px rgba(79,70,229,0.3); }
+.btn-primary { background:var(--brand-primary); color:#fff; box-shadow:0 2px 8px rgba(17,109,64,0.3); }
 .btn-primary:hover { background:var(--brand-hover); }
 .btn-outline { background:var(--bg-surface); border-color:var(--border-strong); color:var(--text-sec); }
-.btn-outline:hover { border-color:var(--brand-soft-bd); color:var(--brand-primary); }
+.btn-outline:hover { border-color:var(--brand-soft-bd); color:var(--accent-text); }
 .btn-ghost { background:transparent; color:var(--text-sec); }
 .btn-ghost:hover { background:var(--bg-subtle); color:var(--text-default); }
 .btn:disabled { opacity:.5; cursor:not-allowed; }
@@ -357,12 +359,12 @@ table.tbl { width:100%; border-collapse:collapse; }
   padding:3px 9px; border-radius:20px; border:1px solid transparent;
 }
 .badge::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.9; }
-.badge.active  { background:rgba(5,150,105,0.10); color:var(--status-success); border-color:rgba(5,150,105,0.3); }
-.badge.suspended { background:rgba(220,38,38,0.10); color:var(--status-danger); border-color:rgba(220,38,38,0.3); }
-.badge.invited { background:rgba(217,119,6,0.10); color:var(--status-warning); border-color:rgba(217,119,6,0.3); }
+.badge.active  { background:rgba(31,199,116,0.12); color:var(--status-success); border-color:rgba(31,199,116,0.35); }
+.badge.suspended { background:rgba(251,60,68,0.10); color:var(--status-danger); border-color:rgba(251,60,68,0.3); }
+.badge.invited { background:rgba(245,158,11,0.10); color:var(--status-warning); border-color:rgba(245,158,11,0.3); }
 .role-chip {
   display:inline-flex; align-items:center; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500;
-  background:var(--brand-soft); color:var(--brand-primary); border:1px solid var(--brand-soft-bd);
+  background:var(--brand-soft); color:var(--accent-text); border:1px solid var(--brand-soft-bd);
   padding:3px 8px; border-radius:6px; margin:2px 4px 2px 0;
 }
 .prod-chip {
@@ -392,7 +394,7 @@ table.tbl { width:100%; border-collapse:collapse; }
   content:''; position:absolute; width:16px; height:16px; left:3px; top:3px;
   background:#fff; border-radius:50%; transition:.18s; box-shadow:0 1px 3px rgba(0,0,0,0.25);
 }
-.switch input:checked + .track { background:var(--brand-primary); }
+.switch input:checked + .track { background:var(--accent-bright); }
 .switch input:checked + .track::before { transform:translateX(18px); }
 
 /* ── Token widgets ── */
@@ -402,8 +404,8 @@ table.tbl { width:100%; border-collapse:collapse; }
 .stat-value { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1; }
 .stat-foot { font-size:12px; color:var(--text-sec); margin-top:8px; }
 .balance-card {
-  background:linear-gradient(135deg, #4F46E5 0%, #4338CA 100%); color:#fff;
-  border-radius:var(--radius-xl); padding:26px 28px; box-shadow:0 10px 30px rgba(79,70,229,0.35);
+  background:linear-gradient(135deg, #2A4251 0%, #0D2839 100%); color:#fff;
+  border-radius:var(--radius-xl); padding:26px 28px; box-shadow:0 10px 30px rgba(13,40,57,0.4);
   position:relative; overflow:hidden;
 }
 .balance-card .stat-label { color:rgba(255,255,255,0.75); }
@@ -415,12 +417,30 @@ table.tbl { width:100%; border-collapse:collapse; }
 
 .alert-banner {
   display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:var(--radius-lg);
-  background:rgba(217,119,6,0.10); border:1px solid rgba(217,119,6,0.3); margin-bottom:20px;
+  background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); margin-bottom:20px;
 }
 .alert-banner .ico { color:var(--status-warning); flex-shrink:0; }
 .alert-banner .txt { flex:1; }
 .alert-banner .txt strong { font-size:13.5px; font-weight:700; color:var(--text-default); }
 .alert-banner .txt p { font-size:12.5px; color:var(--text-sec); margin-top:2px; }
+
+/* ── Quick actions (Overview) ── */
+.quick-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.quick-card {
+  display:flex; align-items:center; gap:14px; cursor:pointer;
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:var(--radius-lg); padding:18px 20px; box-shadow:var(--shadow-sm); transition:all .18s;
+}
+.quick-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--brand-soft-bd); }
+.quick-ico {
+  width:42px; height:42px; border-radius:11px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--brand-soft); color:var(--accent-text); border:1px solid var(--brand-soft-bd);
+}
+.quick-title { font-size:14px; font-weight:700; color:var(--text-default); }
+.quick-sub { font-size:12px; color:var(--text-sec); margin-top:2px; }
+.quick-arr { margin-left:auto; color:var(--text-subtle); flex-shrink:0; }
+.quick-card:hover .quick-arr { color:var(--accent-text); }
 
 /* ── Empty state ── */
 .empty-state { text-align:center; padding:60px 24px; color:var(--text-sec); }
@@ -436,6 +456,7 @@ table.tbl { width:100%; border-collapse:collapse; }
   white-space:nowrap; z-index:50; box-shadow:var(--shadow-md);
 }
 body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-dark-border); }
+body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
 
 /* ── Toast ── */
 .toast-wrap { position:fixed; bottom:24px; right:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
@@ -444,7 +465,7 @@ body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-da
   border-radius:var(--radius-md); padding:12px 16px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600;
   animation: fadeUp .2s ease; min-width:220px;
 }
-.toast .ico { color:var(--brand-primary); }
+.toast .ico { color:var(--accent-bright); }
 
 /* ── Responsive ── */
 @media (max-width: 880px) {
@@ -459,13 +480,10 @@ body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-da
 <!-- ══════════ TOP BAR ══════════ -->
 <div class="topbar">
   <div class="brand">
-    <div class="brand-mark">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-    </div>
-    <div class="brand-name">Cloudhouse <span>Hub</span></div>
+    <img class="brand-logo" src="Cloudhouse.png" alt="Cloudhouse">
+    <div class="brand-name">Hub</div>
   </div>
   <div class="topbar-right">
-    <div class="org-chip"><span class="dot"></span> Northwind Ltd</div>
     <button class="icon-btn" onclick="toggleTheme()" data-tip="Toggle theme" id="theme-btn">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
     </button>
@@ -479,6 +497,10 @@ body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-da
     <div class="sidebar-back" onclick="showView('portal')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back to Hub
+    </div>
+    <div class="sidebar-item" id="sb-cp-overview" onclick="showView('cp-overview')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
+      Overview
     </div>
     <div class="sidebar-section-label">Identity &amp; Access</div>
     <div class="sidebar-item" id="sb-cp-users" onclick="showView('cp-users')">
@@ -564,6 +586,49 @@ body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-da
                 <button class="btn btn-ghost" onclick="toast('Contacting support…')">Contact support</button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CP · OVERVIEW ══════════ -->
+    <div class="view" id="v-cp-overview">
+      <div class="page-pad">
+        <div class="page-head"><div class="page-title">Overview</div><div class="page-sub">A snapshot of your organisation's Cloudhouse usage and administration.</div></div>
+
+        <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card"><div class="stat-label">Total users</div><div class="stat-value">12</div><div class="stat-foot">10 active · 2 invited</div></div>
+          <div class="stat-card"><div class="stat-label">Active products</div><div class="stat-value">2 / 3</div><div class="stat-foot">Guardian · Foundry Flow</div></div>
+          <div class="stat-card"><div class="stat-label">Token balance</div><div class="stat-value">12,480</div><div class="stat-foot" style="color:var(--status-warning);">Runs low in ~9 days</div></div>
+          <div class="stat-card"><div class="stat-label">Pending invites</div><div class="stat-value">2</div><div class="stat-foot">Awaiting acceptance</div></div>
+        </div>
+
+        <div class="section-label">Quick actions</div>
+        <div class="quick-grid">
+          <div class="quick-card" onclick="showView('cp-users')">
+            <div class="quick-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="quick-title">Manage users</div><div class="quick-sub">Invite, suspend & reactivate</div></div>
+            <svg class="quick-arr" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="quick-card" onclick="showView('cp-roles')">
+            <div class="quick-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+            <div><div class="quick-title">Roles &amp; access</div><div class="quick-sub">Assign product-prefixed roles</div></div>
+            <svg class="quick-arr" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="quick-card" onclick="showView('cp-entitlements')">
+            <div class="quick-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div><div class="quick-title">Entitlements</div><div class="quick-sub">Toggle product access</div></div>
+            <svg class="quick-arr" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="quick-card" onclick="showView('cp-tokens')">
+            <div class="quick-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <div><div class="quick-title">Token balance</div><div class="quick-sub">Usage & statement</div></div>
+            <svg class="quick-arr" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="quick-card" onclick="showView('cp-audit')">
+            <div class="quick-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <div><div class="quick-title">Audit log</div><div class="quick-sub">Review admin actions</div></div>
+            <svg class="quick-arr" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </div>
       </div>
@@ -768,12 +833,12 @@ body.dark [data-tip]:hover::after { background:#000; border:1px solid var(--p-da
 
 <script>
 /* ════════════════ ROUTING ════════════════ */
-const ALL = ['portal','cp-users','cp-roles','cp-entitlements','cp-audit','cp-tokens','cp-statement'];
+const ALL = ['portal','cp-overview','cp-users','cp-roles','cp-entitlements','cp-audit','cp-tokens','cp-statement'];
 const LABELS = {
-  'portal':'Hub', 'cp-users':'Users', 'cp-roles':'Roles', 'cp-entitlements':'Entitlements',
+  'portal':'Hub', 'cp-overview':'Overview', 'cp-users':'Users', 'cp-roles':'Roles', 'cp-entitlements':'Entitlements',
   'cp-audit':'Audit log', 'cp-tokens':'Token balance', 'cp-statement':'Token statement'
 };
-const SB_MAP = { 'cp-users':'sb-cp-users','cp-roles':'sb-cp-roles','cp-entitlements':'sb-cp-entitlements','cp-audit':'sb-cp-audit','cp-tokens':'sb-cp-tokens','cp-statement':'sb-cp-statement' };
+const SB_MAP = { 'cp-overview':'sb-cp-overview','cp-users':'sb-cp-users','cp-roles':'sb-cp-roles','cp-entitlements':'sb-cp-entitlements','cp-audit':'sb-cp-audit','cp-tokens':'sb-cp-tokens','cp-statement':'sb-cp-statement' };
 
 function hideAll(){ ALL.forEach(id=>{ const el=document.getElementById('v-'+id); if(el) el.classList.remove('active'); }); }
 function showOnly(id){ hideAll(); const el=document.getElementById('v-'+id); if(el) el.classList.add('active'); }
@@ -790,14 +855,14 @@ function showView(name){
 
 /* ════════════════ PORTAL ELIGIBILITY ════════════════ */
 const TILES = {
-  guardian: { cls:'guardian', title:'Guardian', sub:'Security policy management & compliance drift detection.', icon:'<path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
-  foundry:  { cls:'foundry',  title:'Foundry Flow', sub:'Application packaging & conversion workflows.', icon:'<path d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4M20 7v10l-8 4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  guardian: { cls:'guardian', title:'Guardian', sub:'Security policy management & compliance drift detection.', img:'Guardian.png', icon:'<path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  foundry:  { cls:'foundry',  title:'Foundry Flow', sub:'Application packaging & conversion workflows.', img:'Foundry Flow.png', icon:'<path d="M4 7l8-4 8 4-8 4-8-4zM4 7v10l8 4M20 7v10l-8 4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
   cp:       { cls:'cp',       title:'Organisational Control Panel', sub:'Manage users, roles, entitlements & token balances.', icon:'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 6.8 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4 6.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a2 2 0 0 1 4 0v.1A1.7 1.7 0 0 0 17 4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' }
 };
 function tileHTML(key, opts){
   opts = opts || {};
   const t = TILES[key];
-  const target = key==='cp' ? "showView('cp-users')" : "toast('Opening "+t.title+"…')";
+  const target = key==='cp' ? "showView('cp-overview')" : "toast('Opening "+t.title+"…')";
   const tag = opts.pending ? '<div class="tile-tag pending">Pending</div>' : (opts.locked ? '<div class="tile-tag locked">Locked</div>' : '');
   const disabled = opts.locked || opts.pending ? ' disabled' : '';
   const click = (opts.locked||opts.pending) ? '' : ' onclick="'+target+'"';
@@ -806,7 +871,7 @@ function tileHTML(key, opts){
     '<a class="tile-newtab" data-tip="Open in new tab" onclick="event.stopPropagation();toast(\'Opening in new tab…\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
   return '<div class="tile'+(disabled?' disabled':'')+'"'+click+(opts.tip?' data-tip="'+opts.tip+'"':'')+'>'
     + tag
-    + '<div class="tile-icon '+t.cls+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>'
+    + (t.img ? '<div class="tile-icon"><img src="'+t.img+'" alt="'+t.title+'" style="width:46px;height:46px;border-radius:12px;object-fit:cover;display:block;"></div>' : '<div class="tile-icon '+t.cls+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>')
     + '<div><div class="tile-title">'+t.title+'</div><div class="tile-sub">'+t.sub+'</div></div>'
     + '<div class="tile-foot"><span class="tile-cta">'+cta+(opts.locked||opts.pending?'':' <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')+'</span>'+newtab+'</div>'
     + '</div>';
@@ -884,9 +949,9 @@ const AUDIT = [
   ['jane.doe','Suspended user','eva.sun@northwind.com','This week'],
 ];
 const BYPROD = [
-  ['Guardian','3,210','5,140','#10B981',58],
+  ['Guardian','3,210','5,140','#1FC774',58],
   ['Foundry Flow','842','3,480','#8B5CF6',39],
-  ['Control Panel','120','300','#6366F1',3],
+  ['Control Panel','120','300','#2A4251',3],
 ];
 let _bal = 12480;
 const STMT_OPS = [
@@ -1030,7 +1095,7 @@ function toast(msg){
 }
 
 /* ════════════════ DARK MODE ════════════════ */
-const _DK_BG='#141A2B', _DK_PAGE='#0B0F1A';
+const _DK_BG='#0B2230', _DK_PAGE='#07161F';
 function toggleTheme(){
   const isDark = !document.body.classList.contains('dark');
   document.body.classList.toggle('dark', isDark);
