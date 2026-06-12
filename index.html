@@ -173,7 +173,10 @@ body {
 .brand-logo { height: 17px; width:auto; display:block; }
 .brand-name { font-size:17px; font-weight:800; letter-spacing:-0.3px; color:var(--text-default); }
 .topbar-right { display:flex; align-items:center; gap:14px; }
-.topbar-user { font-size:13px; font-weight:600; color:var(--text-default); }
+.topbar-user { display:flex; flex-direction:column; align-items:flex-end; line-height:1.25; }
+.topbar-user-name { font-size:13px; font-weight:600; color:var(--text-default); }
+.topbar-user-org { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-sec); margin-top:1px; }
+.role-badge { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--accent-text); background:rgba(31,199,116,0.10); border:1px solid var(--brand-soft-bd); border-radius:5px; padding:1px 5px; }
 .icon-btn {
   width:34px; height:34px; border-radius:9px; border:1px solid var(--border-default);
   background:var(--bg-surface); color:var(--text-sec); cursor:pointer;
@@ -593,7 +596,10 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
     <button class="icon-btn" onclick="toggleTheme()" data-tip="Toggle theme" id="theme-btn">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
     </button>
-    <span class="topbar-user">Paul Fisher</span>
+    <div class="topbar-user">
+      <div class="topbar-user-name">Paul Fisher</div>
+      <div class="topbar-user-org"><span class="role-badge">Org admin</span></div>
+    </div>
     <div class="avatar-wrap" id="avatar-wrap">
       <div class="avatar" onclick="toggleAvatarMenu()">PF</div>
       <div class="avatar-menu" id="avatar-menu">
@@ -661,7 +667,7 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
       <div class="portal-wrap">
         <div class="portal-head">
           <h1>Welcome back, Paul</h1>
-          <p>Choose an application to continue, or manage your organisation.</p>
+          <p>Choose an application to continue.</p>
         </div>
 
         <!-- tile grid -->
