@@ -388,6 +388,8 @@ body.dark .admin-role { color:#AEBEC8; background:rgba(122,137,146,0.16); border
 
 .section-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin:30px 0 14px; }
 #portal-pending .section-label { text-align:center; }
+#portal-tiles.pending-left .tile-grid { margin-left:0; margin-right:auto; }
+#portal-tiles.pending-left .section-label { text-align:left; }
 
 .notice {
   display:flex; gap:14px; align-items:flex-start;
@@ -1023,6 +1025,7 @@ function setScenario(s){
   const none = document.getElementById('portal-none');
   grid.style.display='grid'; pending.innerHTML=''; single.style.display='none'; none.style.display='none';
   document.getElementById('portal-tiles').style.display='block';
+  document.getElementById('portal-tiles').classList.toggle('pending-left', s==='pending');
 
   if(s==='multi'){
     grid.innerHTML = tileHTML('guardian') + tileHTML('foundry') + tileHTML('foundry-studio');
