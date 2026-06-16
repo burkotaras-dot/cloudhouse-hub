@@ -505,16 +505,22 @@ table.tbl { width:100%; border-collapse:collapse; }
 .stat-value { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1; }
 .stat-foot { font-size:12px; color:var(--text-sec); margin-top:8px; }
 .balance-card {
-  background:linear-gradient(135deg, #2A4251 0%, #0D2839 100%); color:#fff;
-  border-radius:var(--radius-xl); padding:26px 28px; box-shadow:0 10px 30px rgba(13,40,57,0.4);
+  background:var(--bg-surface);
+  border:1px solid var(--brand-soft-bd);
+  border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm);
   position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
 }
-.balance-card .stat-label { color:rgba(255,255,255,0.75); }
-.balance-card .stat-value { color:#fff; font-size:40px; }
-.balance-card .stat-foot { color:rgba(255,255,255,0.8); }
-.balance-actions { display:flex; gap:10px; margin-top:18px; }
-.balance-card .btn-light { background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.25); }
-.balance-card .btn-light:hover { background:rgba(255,255,255,0.26); }
+.balance-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background:linear-gradient(180deg, var(--accent-bright), var(--brand-primary));
+}
+.balance-card .stat-label { color:var(--text-subtle); }
+.balance-card .stat-value { color:var(--accent-text); font-size:36px; }
+.balance-card .stat-foot { color:var(--text-sec); }
+.balance-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.balance-card .btn-light { background:var(--brand-soft); color:var(--accent-text); border:1px solid var(--brand-soft-bd); }
+.balance-card .btn-light:hover { background:rgba(31,199,116,0.18); }
 
 .alert-banner {
   display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:var(--radius-lg);
@@ -875,9 +881,11 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
 
         <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px;margin-bottom:20px;">
           <div class="balance-card">
-            <div class="stat-label">Current balance</div>
-            <div class="stat-value">12,480</div>
-            <div class="stat-foot">Updated just now · as of 14:32 UTC</div>
+            <div class="balance-info">
+              <div class="stat-label">Current balance</div>
+              <div class="stat-value">12,480</div>
+              <div class="stat-foot">Updated just now · as of 14:32 UTC</div>
+            </div>
             <div class="balance-actions">
               <button class="btn btn-light btn-sm" onclick="toast('Balance refreshed')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
