@@ -683,10 +683,9 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
       <div class="avatar" onclick="toggleAvatarMenu()">PF</div>
       <div class="avatar-menu" id="avatar-menu">
         <div class="avatar-menu-divider" style="margin:0"></div>
-        <div class="avatar-menu-item" style="opacity:.45;cursor:not-allowed;pointer-events:none">
+        <div class="avatar-menu-item" onclick="showView('cp-overview');closeAvatarMenu()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 6.8 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4 6.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a2 2 0 0 1 4 0v.1A1.7 1.7 0 0 0 17 4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           Manage organisation
-          <span style="margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-subtle);border:1px solid var(--border-default);border-radius:6px;padding:2px 6px">Soon</span>
         </div>
         <div class="avatar-menu-divider"></div>
         <div class="avatar-menu-item danger" onclick="toast('Sign out…');closeAvatarMenu()">
