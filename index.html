@@ -436,6 +436,36 @@ body.dark .admin-role { color:#AEBEC8; background:rgba(122,137,146,0.16); border
   padding:9px 12px; font-size:13px; font-family:inherit; border:1px solid var(--border-default);
   border-radius:9px; background:var(--bg-surface); color:var(--text-default); cursor:pointer;
 }
+/* ── Custom select (styled dropdown) ── */
+.csel { position:relative; display:inline-block; }
+.csel-btn {
+  display:flex; align-items:center; gap:10px; width:100%;
+  padding:9px 12px; font-size:13px; font-family:inherit; font-weight:500;
+  border:1px solid var(--border-default); border-radius:9px;
+  background:var(--bg-surface); color:var(--text-default); cursor:pointer;
+  transition:border-color .15s, box-shadow .15s;
+}
+.csel-btn:hover { border-color:var(--brand-soft-bd); }
+.csel.open .csel-btn { border-color:var(--accent-bright); box-shadow:0 0 0 3px var(--brand-soft); }
+.csel-btn .csel-lbl { flex:1; text-align:left; white-space:nowrap; }
+.csel-btn .csel-chv { flex-shrink:0; color:var(--text-subtle); transition:transform .18s; }
+.csel.open .csel-btn .csel-chv { transform:rotate(180deg); }
+.csel-pop {
+  position:absolute; top:calc(100% + 6px); left:0; min-width:100%; z-index:120;
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:10px; box-shadow:var(--shadow-lg); padding:5px;
+  display:none; max-height:280px; overflow-y:auto;
+}
+.csel.open .csel-pop { display:block; }
+.csel-opt {
+  display:flex; align-items:center; gap:9px; white-space:nowrap;
+  padding:8px 10px; font-size:13px; color:var(--text-default);
+  border-radius:7px; cursor:pointer; transition:background .12s;
+}
+.csel-opt:hover { background:var(--bg-subtle); }
+.csel-opt .csel-ck { width:15px; height:15px; flex-shrink:0; color:var(--accent-text); visibility:hidden; }
+.csel-opt.sel { color:var(--accent-text); font-weight:600; }
+.csel-opt.sel .csel-ck { visibility:visible; }
 
 /* ── Table ── */
 .panel { background:var(--bg-surface); border:1px solid var(--border-default); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
@@ -933,12 +963,6 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
               <option value="Guardian">Guardian</option>
               <option value="Foundry Flow">Foundry Flow</option>
             </select>
-            <select class="select" onchange="filterStatus('stmt-tbody', this.value, 4)">
-              <option value="">All users</option>
-              <option value="jane">jane.doe</option>
-              <option value="mark">mark.lee</option>
-              <option value="sara">sara.kim</option>
-            </select>
           </div>
         </div>
         <div class="panel">
@@ -1168,7 +1192,7 @@ function renderByProd(){
 function renderStmt(){
   let bal = _bal;
   document.getElementById('stmt-tbody').innerHTML = STMT_OPS.map(o=>{
-    const row = '<tr data-user="'+o[4].split('.')[0]+'"><td style="font-weight:600;">'+o[0]+'</td><td><span class="prod-chip">'+o[1]+'</span></td>'
+    const row = '<tr><td style="font-weight:600;">'+o[0]+'</td><td><span class="prod-chip">'+o[1]+'</span></td>'
       + '<td class="mono">'+o[2]+'</td><td class="mono" style="color:var(--status-danger);font-weight:600;">−'+o[3]+'</td>'
       + '<td class="muted">'+o[4]+'</td><td class="muted">'+o[5]+'</td><td class="mono" style="text-align:right;font-weight:600;">'+bal.toLocaleString()+'</td></tr>';
     bal += o[3];
@@ -1192,10 +1216,7 @@ function filterStatus(tbodyId, val, colIdx){
   document.querySelectorAll('#'+tbodyId+' tr').forEach(tr=>{
     const cell = tr.cells[colIdx];
     let match = !val;
-    if(val && cell){
-      if(tbodyId==='stmt-tbody' && colIdx===4){ match = (tr.dataset.user===val); }
-      else { match = cell.textContent.toLowerCase().includes(val.toLowerCase()); }
-    }
+    if(val && cell){ match = cell.textContent.toLowerCase().includes(val.toLowerCase()); }
     tr.dataset.hideFilter = match ? '' : '1';
     applyRowVis(tr);
   });
@@ -1341,9 +1362,48 @@ function _syncInlineTheme(isDark){
   }
 })();
 
+/* ════════════════ CUSTOM SELECT ════════════════ */
+function enhanceSelects(){
+  document.querySelectorAll('select.select').forEach(function(sel){
+    if(sel.dataset.enhanced) return;
+    sel.dataset.enhanced = '1';
+    sel.style.display = 'none';
+    const opts = Array.from(sel.options);
+    const wrap = document.createElement('div');
+    wrap.className = 'csel';
+    const chv = '<svg class="csel-chv" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const ck = '<svg class="csel-ck" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    wrap.innerHTML = '<button type="button" class="csel-btn"><span class="csel-lbl">'+opts[sel.selectedIndex].text+'</span>'+chv+'</button>'
+      + '<div class="csel-pop">' + opts.map(function(o,i){
+          return '<div class="csel-opt'+(i===sel.selectedIndex?' sel':'')+'" data-i="'+i+'">'+ck+'<span>'+o.text+'</span></div>';
+        }).join('') + '</div>';
+    sel.parentNode.insertBefore(wrap, sel.nextSibling);
+    const btn = wrap.querySelector('.csel-btn');
+    const lbl = wrap.querySelector('.csel-lbl');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const wasOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.csel.open').forEach(c=>c.classList.remove('open'));
+      if(!wasOpen) wrap.classList.add('open');
+    });
+    wrap.querySelectorAll('.csel-opt').forEach(function(opt){
+      opt.addEventListener('click', function(){
+        const i = +opt.dataset.i;
+        sel.selectedIndex = i;
+        lbl.textContent = opts[i].text;
+        wrap.querySelectorAll('.csel-opt').forEach(o=>o.classList.toggle('sel', o===opt));
+        wrap.classList.remove('open');
+        sel.dispatchEvent(new Event('change'));
+      });
+    });
+  });
+}
+document.addEventListener('click', function(){ document.querySelectorAll('.csel.open').forEach(c=>c.classList.remove('open')); });
+
 /* ════════════════ INIT ════════════════ */
 (function(){
   renderUsers(); renderRoles(); renderEnt(); renderAudit(); renderByProd(); renderStmt();
+  enhanceSelects();
   setScenario('multi');
   document.getElementById('scenario-bar').style.display = 'flex';
   if(localStorage.getItem('hub-theme')==='dark'){
