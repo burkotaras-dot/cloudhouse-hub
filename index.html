@@ -561,6 +561,20 @@ table.tbl { width:100%; border-collapse:collapse; }
 .stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-bottom:10px; }
 .stat-value { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1; }
 .stat-foot { font-size:12px; color:var(--text-sec); margin-top:8px; }
+/* ── Donut stat cards (Overview) ── */
+.donut-card { display:flex; flex-direction:column; padding:18px 20px; }
+.donut-row { display:flex; align-items:center; gap:16px; margin-top:4px; }
+.donut-wrap { position:relative; width:104px; height:104px; flex-shrink:0; }
+.donut-wrap svg { width:100%; height:100%; display:block; }
+.donut-wrap circle { stroke-width:6; }
+.donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; }
+.donut-center .dc-num { font-size:21px; font-weight:800; letter-spacing:-.5px; line-height:1; color:var(--text-default); }
+.donut-center .dc-sub { font-size:9px; font-weight:500; color:var(--text-sec); margin-top:3px; }
+.donut-legend { flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
+.donut-legend .lg-row { display:flex; align-items:center; justify-content:space-between; }
+.donut-legend .lg-name { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--text-sec); }
+.donut-legend .lg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.donut-legend .lg-val { font-size:12px; font-weight:700; color:var(--text-default); }
 .balance-card {
   background:var(--bg-surface);
   border:1px solid var(--brand-soft-bd);
@@ -780,10 +794,82 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
         <div class="page-head"><div class="page-title">Overview</div><div class="page-sub">A snapshot of your organisation's Cloudhouse usage and administration.</div></div>
 
         <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
-          <div class="stat-card"><div class="stat-label">Total users</div><div class="stat-value">12</div><div class="stat-foot">10 active · 2 invited</div></div>
-          <div class="stat-card"><div class="stat-label">Active products</div><div class="stat-value">2 / 3</div><div class="stat-foot">Guardian · Foundry Flow</div></div>
-          <div class="stat-card"><div class="stat-label">Token balance</div><div class="stat-value">12,480</div><div class="stat-foot" style="color:var(--status-warning);">Runs low in ~9 days</div></div>
-          <div class="stat-card"><div class="stat-label">Pending invites</div><div class="stat-value">2</div><div class="stat-foot">Awaiting acceptance</div></div>
+          <!-- Total users -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-users')">
+            <div class="stat-label">Total users</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="195.97 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="36.79 238.76" stroke-dashoffset="-198.97" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">12</div><div class="dc-sub">users</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Active</span><span class="lg-val">10</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Invited</span><span class="lg-val" style="color:#F59E0B;">2</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active products -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-entitlements')">
+            <div class="stat-label">Active products</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="156.17 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#94A3B8" stroke-width="8" stroke-dasharray="76.59 238.76" stroke-dashoffset="-159.17" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">2/3</div><div class="dc-sub">active</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Active</span><span class="lg-val">2</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#94A3B8;"></span>Inactive</span><span class="lg-val" style="color:var(--text-subtle);">1</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Token balance -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-tokens')">
+            <div class="stat-label">Token balance</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="136.25 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="96.52 238.76" stroke-dashoffset="-139.25" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num" style="font-size:17px;">12,480</div><div class="dc-sub">tokens</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Remaining</span><span class="lg-val">12,480</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Used (30d)</span><span class="lg-val" style="color:#F59E0B;">8,920</span></div>
+                <div class="stat-foot" style="color:var(--status-warning);margin-top:7px;">Runs low in ~9 days</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending invites -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-users')">
+            <div class="stat-label">Pending invites</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="195.97 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="36.79 238.76" stroke-dashoffset="-198.97" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">2</div><div class="dc-sub">pending</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Accepted</span><span class="lg-val">10</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Pending</span><span class="lg-val" style="color:#F59E0B;">2</span></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="section-label">Quick actions</div>
