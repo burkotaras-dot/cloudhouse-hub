@@ -436,6 +436,36 @@ body.dark .admin-role { color:#AEBEC8; background:rgba(122,137,146,0.16); border
   padding:9px 12px; font-size:13px; font-family:inherit; border:1px solid var(--border-default);
   border-radius:9px; background:var(--bg-surface); color:var(--text-default); cursor:pointer;
 }
+/* ── Custom select (styled dropdown) ── */
+.csel { position:relative; display:inline-block; }
+.csel-btn {
+  display:flex; align-items:center; gap:10px; width:100%;
+  padding:9px 12px; font-size:13px; font-family:inherit; font-weight:500;
+  border:1px solid var(--border-default); border-radius:9px;
+  background:var(--bg-surface); color:var(--text-default); cursor:pointer;
+  transition:border-color .15s, box-shadow .15s;
+}
+.csel-btn:hover { border-color:var(--brand-soft-bd); }
+.csel.open .csel-btn { border-color:var(--accent-bright); box-shadow:0 0 0 3px var(--brand-soft); }
+.csel-btn .csel-lbl { flex:1; text-align:left; white-space:nowrap; }
+.csel-btn .csel-chv { flex-shrink:0; color:var(--text-subtle); transition:transform .18s; }
+.csel.open .csel-btn .csel-chv { transform:rotate(180deg); }
+.csel-pop {
+  position:absolute; top:calc(100% + 6px); left:0; min-width:100%; z-index:120;
+  background:var(--bg-surface); border:1px solid var(--border-default);
+  border-radius:10px; box-shadow:var(--shadow-lg); padding:5px;
+  display:none; max-height:280px; overflow-y:auto;
+}
+.csel.open .csel-pop { display:block; }
+.csel-opt {
+  display:flex; align-items:center; gap:9px; white-space:nowrap;
+  padding:8px 10px; font-size:13px; color:var(--text-default);
+  border-radius:7px; cursor:pointer; transition:background .12s;
+}
+.csel-opt:hover { background:var(--bg-subtle); }
+.csel-opt .csel-ck { width:15px; height:15px; flex-shrink:0; color:var(--accent-text); visibility:hidden; }
+.csel-opt.sel { color:var(--accent-text); font-weight:600; }
+.csel-opt.sel .csel-ck { visibility:visible; }
 
 /* ── Table ── */
 .panel { background:var(--bg-surface); border:1px solid var(--border-default); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
@@ -474,6 +504,33 @@ table.tbl { width:100%; border-collapse:collapse; }
   background:var(--bg-subtle); border:1px solid var(--border-default); color:var(--text-sec);
 }
 
+/* ── Modal (role editor) ── */
+.modal-overlay { position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(7,22,31,0.55); }
+.modal-overlay.open { display:flex; }
+.modal { width:100%; max-width:540px; background:var(--bg-surface); border:1px solid var(--border-default); border-radius:var(--radius-xl); box-shadow:0 24px 60px rgba(0,0,0,0.35); max-height:88vh; display:flex; flex-direction:column; overflow:hidden; }
+.modal-head { display:flex; align-items:flex-start; gap:13px; padding:20px 22px; border-bottom:1px solid var(--border-subtle); }
+.modal-head .avatar { width:42px; height:42px; font-size:14px; flex-shrink:0; }
+.modal-head .mh-name { font-size:16px; font-weight:700; color:var(--text-default); }
+.modal-head .mh-email { font-size:12.5px; color:var(--text-sec); margin-top:2px; }
+.modal-close { margin-left:auto; background:none; border:none; cursor:pointer; color:var(--text-subtle); padding:4px; border-radius:7px; display:flex; }
+.modal-close:hover { background:var(--bg-subtle); color:var(--text-default); }
+.modal-body { padding:6px 22px 18px; overflow-y:auto; }
+.modal-foot { display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border-subtle); }
+.re-section { padding:15px 0; border-bottom:1px solid var(--border-subtle); }
+.re-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.re-name { font-size:13.5px; font-weight:700; color:var(--text-default); }
+.re-desc { font-size:12px; color:var(--text-sec); margin-top:2px; max-width:300px; }
+.re-seg { display:inline-flex; background:var(--bg-subtle); border:1px solid var(--border-default); border-radius:9px; padding:3px; gap:2px; flex-shrink:0; }
+.re-seg button { border:none; background:none; font-family:inherit; font-size:12px; font-weight:600; color:var(--text-sec); padding:5px 11px; border-radius:6px; cursor:pointer; transition:all .15s; }
+.re-seg button:hover { color:var(--text-default); }
+.re-seg button.active { background:var(--bg-surface); color:var(--accent-text); box-shadow:var(--shadow-sm); }
+.re-perms { margin-top:16px; background:var(--bg-subtle); border:1px solid var(--border-default); border-radius:10px; padding:13px 14px; }
+.re-perms .rp-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-bottom:9px; }
+.re-perms .rp-list { display:flex; flex-direction:column; gap:7px; }
+.re-perms .rp-item { display:flex; align-items:center; gap:9px; }
+.re-perms .rp-item .rp-txt { font-size:12.5px; color:var(--text-sec); }
+.re-perms .rp-none { font-size:12.5px; color:var(--text-subtle); }
+
 /* ── Pagination ── */
 .pager { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--border-subtle); }
 .pager-info { font-size:12px; color:var(--text-sec); }
@@ -504,17 +561,37 @@ table.tbl { width:100%; border-collapse:collapse; }
 .stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-subtle); margin-bottom:10px; }
 .stat-value { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1; }
 .stat-foot { font-size:12px; color:var(--text-sec); margin-top:8px; }
+/* ── Donut stat cards (Overview) ── */
+.donut-card { display:flex; flex-direction:column; padding:18px 20px; }
+.donut-row { display:flex; align-items:center; gap:16px; margin-top:4px; }
+.donut-wrap { position:relative; width:104px; height:104px; flex-shrink:0; }
+.donut-wrap svg { width:100%; height:100%; display:block; }
+.donut-wrap circle { stroke-width:6; }
+.donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; }
+.donut-center .dc-num { font-size:21px; font-weight:800; letter-spacing:-.5px; line-height:1; color:var(--text-default); }
+.donut-center .dc-sub { font-size:9px; font-weight:500; color:var(--text-sec); margin-top:3px; }
+.donut-legend { flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
+.donut-legend .lg-row { display:flex; align-items:center; justify-content:space-between; }
+.donut-legend .lg-name { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--text-sec); }
+.donut-legend .lg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.donut-legend .lg-val { font-size:12px; font-weight:700; color:var(--text-default); }
 .balance-card {
-  background:linear-gradient(135deg, #2A4251 0%, #0D2839 100%); color:#fff;
-  border-radius:var(--radius-xl); padding:26px 28px; box-shadow:0 10px 30px rgba(13,40,57,0.4);
+  background:var(--bg-surface);
+  border:1px solid var(--brand-soft-bd);
+  border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm);
   position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
 }
-.balance-card .stat-label { color:rgba(255,255,255,0.75); }
-.balance-card .stat-value { color:#fff; font-size:40px; }
-.balance-card .stat-foot { color:rgba(255,255,255,0.8); }
-.balance-actions { display:flex; gap:10px; margin-top:18px; }
-.balance-card .btn-light { background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.25); }
-.balance-card .btn-light:hover { background:rgba(255,255,255,0.26); }
+.balance-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background:linear-gradient(180deg, var(--accent-bright), var(--brand-primary));
+}
+.balance-card .stat-label { color:var(--text-subtle); }
+.balance-card .stat-value { color:var(--accent-text); font-size:36px; }
+.balance-card .stat-foot { color:var(--text-sec); }
+.balance-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.balance-card .btn-light { background:var(--brand-soft); color:var(--accent-text); border:1px solid var(--brand-soft-bd); }
+.balance-card .btn-light:hover { background:rgba(31,199,116,0.18); }
 
 .alert-banner {
   display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:var(--radius-lg);
@@ -718,10 +795,82 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
         <div class="page-head"><div class="page-title">Overview</div><div class="page-sub">A snapshot of your organisation's Cloudhouse usage and administration.</div></div>
 
         <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
-          <div class="stat-card"><div class="stat-label">Total users</div><div class="stat-value">12</div><div class="stat-foot">10 active · 2 invited</div></div>
-          <div class="stat-card"><div class="stat-label">Active products</div><div class="stat-value">2 / 3</div><div class="stat-foot">Guardian · Foundry Flow</div></div>
-          <div class="stat-card"><div class="stat-label">Token balance</div><div class="stat-value">12,480</div><div class="stat-foot" style="color:var(--status-warning);">Runs low in ~9 days</div></div>
-          <div class="stat-card"><div class="stat-label">Pending invites</div><div class="stat-value">2</div><div class="stat-foot">Awaiting acceptance</div></div>
+          <!-- Total users -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-users')">
+            <div class="stat-label">Total users</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="195.97 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="36.79 238.76" stroke-dashoffset="-198.97" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">12</div><div class="dc-sub">users</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Active</span><span class="lg-val">10</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Invited</span><span class="lg-val" style="color:#F59E0B;">2</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active products -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-entitlements')">
+            <div class="stat-label">Active products</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="156.17 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#94A3B8" stroke-width="8" stroke-dasharray="76.59 238.76" stroke-dashoffset="-159.17" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">2/3</div><div class="dc-sub">active</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Active</span><span class="lg-val">2</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#94A3B8;"></span>Inactive</span><span class="lg-val" style="color:var(--text-subtle);">1</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Token balance -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-tokens')">
+            <div class="stat-label">Token balance</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="136.25 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="96.52 238.76" stroke-dashoffset="-139.25" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num" style="font-size:17px;">12,480</div><div class="dc-sub">tokens</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Remaining</span><span class="lg-val">12,480</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Used (30d)</span><span class="lg-val" style="color:#F59E0B;">8,920</span></div>
+                <div class="stat-foot" style="color:var(--status-warning);margin-top:7px;">Runs low in ~9 days</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending invites -->
+          <div class="stat-card donut-card" style="cursor:pointer;" onclick="showView('cp-users')">
+            <div class="stat-label">Pending invites</div>
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg width="76" height="76" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-default)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#1FC774" stroke-width="8" stroke-dasharray="195.97 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="8" stroke-dasharray="36.79 238.76" stroke-dashoffset="-198.97" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center"><div class="dc-num">2</div><div class="dc-sub">pending</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#1FC774;"></span>Accepted</span><span class="lg-val">10</span></div>
+                <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:#F59E0B;"></span>Pending</span><span class="lg-val" style="color:#F59E0B;">2</span></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="section-label">Quick actions</div>
@@ -876,9 +1025,11 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
 
         <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px;margin-bottom:20px;">
           <div class="balance-card">
-            <div class="stat-label">Current balance</div>
-            <div class="stat-value">12,480</div>
-            <div class="stat-foot">Updated just now · as of 14:32 UTC</div>
+            <div class="balance-info">
+              <div class="stat-label">Current balance</div>
+              <div class="stat-value">12,480</div>
+              <div class="stat-foot">Updated just now · as of 14:32 UTC</div>
+            </div>
             <div class="balance-actions">
               <button class="btn btn-light btn-sm" onclick="toast('Balance refreshed')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -926,12 +1077,6 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
               <option value="Guardian">Guardian</option>
               <option value="Foundry Flow">Foundry Flow</option>
             </select>
-            <select class="select" onchange="filterStatus('stmt-tbody', this.value, 4)">
-              <option value="">All users</option>
-              <option value="jane">jane.doe</option>
-              <option value="mark">mark.lee</option>
-              <option value="sara">sara.kim</option>
-            </select>
           </div>
         </div>
         <div class="panel">
@@ -951,6 +1096,7 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
 </div>
 
 <div class="toast-wrap" id="toast-wrap"></div>
+<div class="modal-overlay" id="role-modal" onclick="if(event.target===this)closeRoleEditor()"></div>
 
 <script>
 /* ════════════════ ROUTING ════════════════ */
@@ -1122,27 +1268,111 @@ function rolesHTML(rs){ return rs.length ? rs.map(r=>'<span class="role-chip">'+
 function userCell(name,email,init){ return '<div class="cell-user"><div class="avatar">'+init+'</div><div><div class="nm">'+name+'</div><div class="em">'+email+'</div></div></div>'; }
 
 function renderUsers(){
-  document.getElementById('users-tbody').innerHTML = USERS.map(u=>{
+  document.getElementById('users-tbody').innerHTML = USERS.map((u,i)=>{
     const acts = u[3]==='Suspended'
-      ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'User reactivated\')">Reactivate</button>'
-      : (u[3]==='Invited' ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'Invite resent\')">Resend</button>'
-      : '<button class="btn btn-ghost btn-sm" onclick="toast(\'User suspended\')">Suspend</button>');
+      ? '<button class="btn btn-ghost btn-sm" onclick="setUserStatus('+i+',\'Active\',\'User reactivated\')">Reactivate</button>'
+      : (u[3]==='Invited' ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'Invite resent to \'+'+JSON.stringify(u[0])+')">Resend</button>'
+      : '<button class="btn btn-ghost btn-sm" onclick="setUserStatus('+i+',\'Suspended\',\'User suspended\')">Suspend</button>');
     return '<tr><td>'+userCell(u[1],u[0],u[5])+'</td><td>'+rolesHTML(u[2])+'</td><td>'+statusBadge(u[3])+'</td><td class="muted">'+u[4]+'</td><td style="text-align:right;">'+acts+'</td></tr>';
   }).join('');
   paginate('users-tbody','users',7);
 }
+function setUserStatus(i, status, msg){
+  USERS[i][3] = status;
+  renderUsers();
+  toast(msg);
+}
 function renderRoles(){
-  document.getElementById('roles-tbody').innerHTML = USERS.filter(u=>u[2].length).map(u=>{
-    const perms = u[2].map(r=>PERMS[r]).filter(Boolean);
-    return '<tr><td>'+userCell(u[1],u[0],u[5])+'</td><td>'+rolesHTML(u[2])+'</td><td class="muted" style="font-size:12px;">'+perms.join(' · ')+'</td><td style="text-align:right;"><button class="btn btn-outline btn-sm" onclick="toast(\'Role editor (demo)\')">Edit</button></td></tr>';
+  document.getElementById('roles-tbody').innerHTML = USERS.map((u,i)=>({u:u,i:i})).filter(o=>o.u[2].length).map(function(o){
+    const u=o.u, perms = u[2].map(r=>PERMS[r]).filter(Boolean);
+    return '<tr><td>'+userCell(u[1],u[0],u[5])+'</td><td>'+rolesHTML(u[2])+'</td><td class="muted" style="font-size:12px;">'+perms.join(' · ')+'</td><td style="text-align:right;"><button class="btn btn-outline btn-sm" onclick="openRoleEditor('+o.i+')">Edit</button></td></tr>';
   }).join('');
 }
+
+/* ──────── ROLE EDITOR ──────── */
+let _roleEdit = null;
+const ROLE_LEVELS = ['none','viewer','editor','admin'];
+function _splitRoles(rs){
+  const st = {org:false, guardian:'none', foundry:'none'};
+  rs.forEach(function(r){
+    if(r==='cloudhouse:org-admin') st.org=true;
+    else if(r.indexOf('guardian:')===0) st.guardian = r.split(':')[1];
+    else if(r.indexOf('foundry-flow:')===0) st.foundry = r.split(':')[1];
+  });
+  return st;
+}
+function _composeRoles(st){
+  const rs=[];
+  if(st.org) rs.push('cloudhouse:org-admin');
+  if(st.guardian!=='none') rs.push('guardian:'+st.guardian);
+  if(st.foundry!=='none') rs.push('foundry-flow:'+st.foundry);
+  return rs;
+}
+function _segSection(title,desc,key){
+  const btns = ROLE_LEVELS.map(function(l){
+    const lbl = l==='none' ? 'None' : l[0].toUpperCase()+l.slice(1);
+    return '<button data-lvl="'+l+'" class="'+(_roleEdit[key]===l?'active':'')+'" onclick="_setLevel(\''+key+'\',\''+l+'\')">'+lbl+'</button>';
+  }).join('');
+  return '<div class="re-section"><div class="re-row"><div><div class="re-name">'+title+'</div><div class="re-desc">'+desc+'</div></div>'
+    + '<div class="re-seg" id="re-seg-'+key+'">'+btns+'</div></div></div>';
+}
+function openRoleEditor(idx){
+  const u=USERS[idx];
+  _roleEdit = Object.assign({idx:idx}, _splitRoles(u[2]));
+  const m=document.getElementById('role-modal');
+  m.innerHTML = '<div class="modal">'
+    + '<div class="modal-head"><div class="avatar">'+u[5]+'</div>'
+      + '<div><div class="mh-name">'+u[1]+'</div><div class="mh-email">'+u[0]+'</div></div>'
+      + '<button class="modal-close" onclick="closeRoleEditor()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>'
+    + '<div class="modal-body">'
+      + '<div class="re-section"><div class="re-row"><div><div class="re-name">Organisation administrator</div><div class="re-desc">Full access to the Control Panel — users, roles, entitlements &amp; tokens.</div></div>'
+        + '<label class="switch"><input type="checkbox" '+(_roleEdit.org?'checked':'')+' onchange="_roleEdit.org=this.checked;_renderPerms()"><span class="track"></span></label></div></div>'
+      + _segSection('Guardian','Security policy management & compliance.','guardian')
+      + _segSection('Foundry Flow','Application packaging & conversion.','foundry')
+      + '<div class="re-perms"><div class="rp-label">Effective permissions</div><div class="rp-list" id="re-perms-list"></div></div>'
+      + '</div>'
+    + '<div class="modal-foot"><button class="btn btn-outline" onclick="closeRoleEditor()">Cancel</button><button class="btn btn-primary" onclick="saveRoleEditor()">Save changes</button></div>'
+    + '</div>';
+  m.classList.add('open');
+  _renderPerms();
+  if(document.body.classList.contains('dark')) _syncInlineTheme(true);
+}
+function _setLevel(key,lvl){
+  _roleEdit[key]=lvl;
+  document.querySelectorAll('#re-seg-'+key+' button').forEach(function(b){ b.classList.toggle('active', b.dataset.lvl===lvl); });
+  _renderPerms();
+}
+function _renderPerms(){
+  const rs=_composeRoles(_roleEdit);
+  const el=document.getElementById('re-perms-list');
+  if(!rs.length){ el.innerHTML='<div class="rp-none">No roles assigned — this user has no access.</div>'; return; }
+  el.innerHTML = rs.map(function(r){
+    return '<div class="rp-item"><span class="role-chip">'+r+'</span><span class="rp-txt">'+(PERMS[r]||'')+'</span></div>';
+  }).join('');
+}
+function saveRoleEditor(){
+  if(!_roleEdit) return;
+  const name=USERS[_roleEdit.idx][1];
+  USERS[_roleEdit.idx][2]=_composeRoles(_roleEdit);
+  closeRoleEditor();
+  renderRoles(); renderUsers();
+  toast('Roles updated for '+name);
+}
+function closeRoleEditor(){ document.getElementById('role-modal').classList.remove('open'); _roleEdit=null; }
 function renderEnt(){
   document.getElementById('ent-tbody').innerHTML = ENT.map((e,i)=>{
-    return '<tr><td><div style="display:flex;align-items:center;gap:10px;"><div class="tile-icon '+e[4]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+TILES[e[4]].icon+'</svg></div><span style="font-weight:600;">'+e[0]+'</span></div></td>'
+    const t = TILES[e[4]];
+    const ico = t.img
+      ? '<img src="'+t.img+'" alt="'+e[0]+'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;display:block;">'
+      : '<div class="tile-icon '+e[4]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>';
+    return '<tr><td><div style="display:flex;align-items:center;gap:10px;">'+ico+'<span style="font-weight:600;">'+e[0]+'</span></div></td>'
       + '<td class="muted">'+e[1]+'</td><td class="mono">'+e[2]+'</td>'
-      + '<td style="text-align:right;"><label class="switch" style="display:inline-block;"><input type="checkbox" '+(e[3]?'checked':'')+' onchange="toast(\''+e[0]+' '+'\'+(this.checked?\'enabled\':\'disabled\'))"><span class="track"></span></label></td></tr>';
+      + '<td style="text-align:right;"><label class="switch" style="display:inline-block;"><input type="checkbox" '+(e[3]?'checked':'')+' onchange="setEntitlement('+i+',this.checked)"><span class="track"></span></label></td></tr>';
   }).join('');
+}
+function setEntitlement(i, on){
+  ENT[i][3] = on;
+  toast(ENT[i][0]+(on?' enabled':' disabled'));
 }
 function renderAudit(){
   document.getElementById('audit-tbody').innerHTML = AUDIT.map(a=>{
@@ -1161,7 +1391,7 @@ function renderByProd(){
 function renderStmt(){
   let bal = _bal;
   document.getElementById('stmt-tbody').innerHTML = STMT_OPS.map(o=>{
-    const row = '<tr data-user="'+o[4].split('.')[0]+'"><td style="font-weight:600;">'+o[0]+'</td><td><span class="prod-chip">'+o[1]+'</span></td>'
+    const row = '<tr><td style="font-weight:600;">'+o[0]+'</td><td><span class="prod-chip">'+o[1]+'</span></td>'
       + '<td class="mono">'+o[2]+'</td><td class="mono" style="color:var(--status-danger);font-weight:600;">−'+o[3]+'</td>'
       + '<td class="muted">'+o[4]+'</td><td class="muted">'+o[5]+'</td><td class="mono" style="text-align:right;font-weight:600;">'+bal.toLocaleString()+'</td></tr>';
     bal += o[3];
@@ -1185,10 +1415,7 @@ function filterStatus(tbodyId, val, colIdx){
   document.querySelectorAll('#'+tbodyId+' tr').forEach(tr=>{
     const cell = tr.cells[colIdx];
     let match = !val;
-    if(val && cell){
-      if(tbodyId==='stmt-tbody' && colIdx===4){ match = (tr.dataset.user===val); }
-      else { match = cell.textContent.toLowerCase().includes(val.toLowerCase()); }
-    }
+    if(val && cell){ match = cell.textContent.toLowerCase().includes(val.toLowerCase()); }
     tr.dataset.hideFilter = match ? '' : '1';
     applyRowVis(tr);
   });
@@ -1334,9 +1561,48 @@ function _syncInlineTheme(isDark){
   }
 })();
 
+/* ════════════════ CUSTOM SELECT ════════════════ */
+function enhanceSelects(){
+  document.querySelectorAll('select.select').forEach(function(sel){
+    if(sel.dataset.enhanced) return;
+    sel.dataset.enhanced = '1';
+    sel.style.display = 'none';
+    const opts = Array.from(sel.options);
+    const wrap = document.createElement('div');
+    wrap.className = 'csel';
+    const chv = '<svg class="csel-chv" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const ck = '<svg class="csel-ck" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    wrap.innerHTML = '<button type="button" class="csel-btn"><span class="csel-lbl">'+opts[sel.selectedIndex].text+'</span>'+chv+'</button>'
+      + '<div class="csel-pop">' + opts.map(function(o,i){
+          return '<div class="csel-opt'+(i===sel.selectedIndex?' sel':'')+'" data-i="'+i+'">'+ck+'<span>'+o.text+'</span></div>';
+        }).join('') + '</div>';
+    sel.parentNode.insertBefore(wrap, sel.nextSibling);
+    const btn = wrap.querySelector('.csel-btn');
+    const lbl = wrap.querySelector('.csel-lbl');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const wasOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.csel.open').forEach(c=>c.classList.remove('open'));
+      if(!wasOpen) wrap.classList.add('open');
+    });
+    wrap.querySelectorAll('.csel-opt').forEach(function(opt){
+      opt.addEventListener('click', function(){
+        const i = +opt.dataset.i;
+        sel.selectedIndex = i;
+        lbl.textContent = opts[i].text;
+        wrap.querySelectorAll('.csel-opt').forEach(o=>o.classList.toggle('sel', o===opt));
+        wrap.classList.remove('open');
+        sel.dispatchEvent(new Event('change'));
+      });
+    });
+  });
+}
+document.addEventListener('click', function(){ document.querySelectorAll('.csel.open').forEach(c=>c.classList.remove('open')); });
+
 /* ════════════════ INIT ════════════════ */
 (function(){
   renderUsers(); renderRoles(); renderEnt(); renderAudit(); renderByProd(); renderStmt();
+  enhanceSelects();
   setScenario('multi');
   document.getElementById('scenario-bar').style.display = 'flex';
   if(localStorage.getItem('hub-theme')==='dark'){
