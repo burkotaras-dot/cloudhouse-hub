@@ -484,6 +484,13 @@ table.tbl { width:100%; border-collapse:collapse; }
 .tbl tbody td { padding:13px 18px; font-size:13px; border-bottom:1px solid var(--border-subtle); color:var(--text-default); vertical-align:middle; }
 .tbl tbody tr:last-child td { border-bottom:none; }
 .tbl tbody tr:hover { background:var(--bg-subtle); }
+.seat-bar-wrap { display:flex; align-items:center; gap:10px; }
+.seat-bar { flex:1; height:6px; border-radius:99px; background:var(--border-default); overflow:hidden; min-width:80px; }
+.seat-bar-fill { height:100%; border-radius:99px; }
+.seat-label { font-size:12px; font-variant-numeric:tabular-nums; color:var(--text-subtle); white-space:nowrap; }
+.ent-status { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:3px 9px; border-radius:99px; }
+.ent-status.active { color:#116D40; background:rgba(31,199,116,0.12); border:1px solid rgba(31,199,116,0.3); }
+.ent-status.inactive { color:var(--text-subtle); background:var(--bg-subtle); border:1px solid var(--border-default); }
 .cell-user { display:flex; align-items:center; gap:11px; }
 .cell-user .avatar { width:32px; height:32px; font-size:11px; }
 .cell-user .nm { font-weight:600; }
@@ -948,10 +955,10 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
     <!-- ══════════ CP · ENTITLEMENTS ══════════ -->
     <div class="view" id="v-cp-entitlements">
       <div class="page-pad">
-        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Toggle which products your organisation can access. Per-user overrides apply in the Users tab.</div></div>
+        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Licensed products, seat usage, and renewal dates for your organisation.</div></div>
         <div class="panel">
           <table class="tbl">
-            <thead><tr><th>Product</th><th>Description</th><th>Seats in use</th><th style="text-align:right;">Org access</th></tr></thead>
+            <thead><tr><th>Product</th><th>Description</th><th style="width:240px;">Seats in use</th><th>Status</th><th>Renewal</th></tr></thead>
             <tbody id="ent-tbody"></tbody>
           </table>
         </div>
@@ -1204,10 +1211,8 @@ const PERMS = {
   'foundry-flow:editor':'Foundry: run conversions',
 };
 const ENT = [
-  ['Guardian','Security policy management & compliance','9 / 25 seats',true,'guardian'],
-  ['Foundry Flow','Application packaging & conversion','6 / 15 seats',true,'foundry'],
-  ['Organisational Control Panel','Tenant administration','—',true,'cp'],
-  ['Argus Einstein','Predictive remediation (Labs)','—',false,'cp'],
+  ['Guardian','Security policy management & compliance',9,25,'active','1 Jan 2027','guardian'],
+  ['Foundry Flow','Application packaging & conversion',6,15,'active','1 Jan 2027','foundry'],
 ];
 const AUDIT = [
   ['paul.fisher','Assigned role guardian:admin','mia.fox@northwind.com','Today'],
@@ -1217,7 +1222,6 @@ const AUDIT = [
   ['nora.faye','Exported statement','statement-2026-06.csv','Yesterday'],
   ['mark.lee','Reactivated user','eva.sun@northwind.com','Yesterday'],
   ['paul.fisher','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
-  ['nora.faye','Removed entitlement','Argus Einstein','This week'],
   ['paul.fisher','Invited user','ben.ash@northwind.com','This week'],
   ['mark.lee','Changed role guardian:viewer → guardian:admin','liu.chen@northwind.com','This week'],
   ['nora.faye','Refreshed token balance','—','This week'],
@@ -1396,19 +1400,24 @@ function saveInvite(){
 }
 function closeInvite(){ document.getElementById('invite-modal').classList.remove('open'); _invite=null; }
 function renderEnt(){
-  document.getElementById('ent-tbody').innerHTML = ENT.map((e,i)=>{
-    const t = TILES[e[4]];
+  document.getElementById('ent-tbody').innerHTML = ENT.map(e=>{
+    const t = TILES[e[6]];
     const ico = t.img
       ? '<img src="'+t.img+'" alt="'+e[0]+'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;display:block;">'
-      : '<div class="tile-icon '+e[4]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>';
-    return '<tr><td><div style="display:flex;align-items:center;gap:10px;">'+ico+'<span style="font-weight:600;">'+e[0]+'</span></div></td>'
-      + '<td class="muted">'+e[1]+'</td><td class="mono">'+e[2]+'</td>'
-      + '<td style="text-align:right;"><label class="switch" style="display:inline-block;"><input type="checkbox" '+(e[3]?'checked':'')+' onchange="setEntitlement('+i+',this.checked)"><span class="track"></span></label></td></tr>';
+      : '<div class="tile-icon '+e[6]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>';
+    const used=e[2], total=e[3], pct=Math.round(used/total*100);
+    const fillColor = pct>=90?'#FB3C44':pct>=70?'#F59E0B':'#1FC774';
+    const bar='<div class="seat-bar-wrap"><div class="seat-bar"><div class="seat-bar-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>'
+      +'<span class="seat-label">'+used+' / '+total+'</span></div>';
+    const status='<span class="ent-status '+e[4]+'">'+e[4][0].toUpperCase()+e[4].slice(1)+'</span>';
+    return '<tr>'
+      +'<td><div style="display:flex;align-items:center;gap:10px;">'+ico+'<span style="font-weight:600;">'+e[0]+'</span></div></td>'
+      +'<td class="muted">'+e[1]+'</td>'
+      +'<td>'+bar+'</td>'
+      +'<td>'+status+'</td>'
+      +'<td class="muted">'+e[5]+'</td>'
+      +'</tr>';
   }).join('');
-}
-function setEntitlement(i, on){
-  ENT[i][3] = on;
-  toast(ENT[i][0]+(on?' enabled':' disabled'));
 }
 function renderAudit(){
   document.getElementById('audit-tbody').innerHTML = AUDIT.map(a=>{
