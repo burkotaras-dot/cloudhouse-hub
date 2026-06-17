@@ -948,7 +948,7 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
     <!-- ══════════ CP · ENTITLEMENTS ══════════ -->
     <div class="view" id="v-cp-entitlements">
       <div class="page-pad">
-        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Toggle which products your organisation can access. Per-user overrides apply in the Users tab.</div></div>
+        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Toggle which products your organisation can access.</div></div>
         <div class="panel">
           <table class="tbl">
             <thead><tr><th>Product</th><th>Description</th><th>Seats in use</th><th style="text-align:right;">Org access</th></tr></thead>
@@ -1206,8 +1206,6 @@ const PERMS = {
 const ENT = [
   ['Guardian','Security policy management & compliance','9 / 25 seats',true,'guardian'],
   ['Foundry Flow','Application packaging & conversion','6 / 15 seats',true,'foundry'],
-  ['Organisational Control Panel','Tenant administration','—',true,'cp'],
-  ['Argus Einstein','Predictive remediation (Labs)','—',false,'cp'],
 ];
 const AUDIT = [
   ['paul.fisher','Assigned role guardian:admin','mia.fox@northwind.com','Today'],
@@ -1217,7 +1215,6 @@ const AUDIT = [
   ['nora.faye','Exported statement','statement-2026-06.csv','Yesterday'],
   ['mark.lee','Reactivated user','eva.sun@northwind.com','Yesterday'],
   ['paul.fisher','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
-  ['nora.faye','Removed entitlement','Argus Einstein','This week'],
   ['paul.fisher','Invited user','ben.ash@northwind.com','This week'],
   ['mark.lee','Changed role guardian:viewer → guardian:admin','liu.chen@northwind.com','This week'],
   ['nora.faye','Refreshed token balance','—','This week'],
