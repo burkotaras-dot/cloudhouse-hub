@@ -1207,26 +1207,24 @@ function setScenario(s){
 /* ════════════════ DATA ════════════════ */
 const USERS = [
   ['paul.fisher@northwind.com','Paul Fisher',['cloudhouse:org-admin','guardian:admin'],'Active','2 min ago','PF'],
-  ['mark.lee@northwind.com','Mark Lee',['guardian:editor','foundry-flow:editor'],'Active','1 hour ago','ML'],
+  ['mark.lee@northwind.com','Mark Lee',['guardian:viewer','foundry-flow:editor'],'Active','1 hour ago','ML'],
   ['sara.kim@northwind.com','Sara Kim',['guardian:viewer'],'Active','Yesterday','SK'],
   ['tom.wills@northwind.com','Tom Wills',['foundry-flow:admin'],'Suspended','3 weeks ago','TW'],
-  ['amy.cole@northwind.com','Amy Cole',['guardian:viewer','foundry-flow:viewer'],'Active','5 hours ago','AC'],
+  ['amy.cole@northwind.com','Amy Cole',['guardian:viewer','foundry-flow:editor'],'Active','5 hours ago','AC'],
   ['raj.patel@northwind.com','Raj Patel',[],'Invited','—','RP'],
-  ['liu.chen@northwind.com','Liu Chen',['guardian:editor'],'Active','2 days ago','LC'],
+  ['liu.chen@northwind.com','Liu Chen',['guardian:viewer'],'Active','2 days ago','LC'],
   ['nora.faye@northwind.com','Nora Faye',['cloudhouse:org-admin'],'Active','30 min ago','NF'],
   ['ivan.ko@northwind.com','Ivan Ko',['foundry-flow:editor'],'Active','4 days ago','IK'],
   ['eva.sun@northwind.com','Eva Sun',['guardian:viewer'],'Suspended','2 months ago','ES'],
   ['ben.ash@northwind.com','Ben Ash',[],'Invited','—','BA'],
-  ['mia.fox@northwind.com','Mia Fox',['guardian:admin','foundry-flow:viewer'],'Active','12 min ago','MF'],
+  ['mia.fox@northwind.com','Mia Fox',['guardian:admin','foundry-flow:editor'],'Active','12 min ago','MF'],
 ];
 const PERMS = {
   'cloudhouse:org-admin':'Full org administration',
   'guardian:admin':'Guardian: manage policies & nodes',
-  'guardian:editor':'Guardian: edit policies',
   'guardian:viewer':'Guardian: read-only',
   'foundry-flow:admin':'Foundry: full access',
   'foundry-flow:editor':'Foundry: run conversions',
-  'foundry-flow:viewer':'Foundry: read-only',
 };
 const ENT = [
   ['Guardian','Security policy management & compliance','9 / 25 seats',true,'guardian'],
@@ -1244,7 +1242,7 @@ const AUDIT = [
   ['paul.fisher','Assigned role foundry-flow:editor','ivan.ko@northwind.com','This week'],
   ['nora.faye','Removed entitlement','Argus Einstein','This week'],
   ['paul.fisher','Invited user','ben.ash@northwind.com','This week'],
-  ['mark.lee','Changed role guardian:viewer → guardian:editor','liu.chen@northwind.com','This week'],
+  ['mark.lee','Changed role guardian:viewer → guardian:admin','liu.chen@northwind.com','This week'],
   ['nora.faye','Refreshed token balance','—','This week'],
   ['paul.fisher','Suspended user','eva.sun@northwind.com','This week'],
 ];
@@ -1298,7 +1296,7 @@ function renderRoles(){
 
 /* ──────── ROLE EDITOR ──────── */
 let _roleEdit = null;
-const ROLE_LEVELS = ['none','viewer','editor','admin'];
+const PROD_LEVELS = { guardian:['none','viewer','admin'], foundry:['none','editor','admin'] };
 function _splitRoles(rs){
   const st = {org:false, guardian:'none', foundry:'none'};
   rs.forEach(function(r){
@@ -1316,7 +1314,7 @@ function _composeRoles(st){
   return rs;
 }
 function _segSection(title,desc,key){
-  const btns = ROLE_LEVELS.map(function(l){
+  const btns = PROD_LEVELS[key].map(function(l){
     const lbl = l==='none' ? 'None' : l[0].toUpperCase()+l.slice(1);
     return '<button data-lvl="'+l+'" class="'+(_roleEdit[key]===l?'active':'')+'" onclick="_setLevel(\''+key+'\',\''+l+'\')">'+lbl+'</button>';
   }).join('');
@@ -1370,7 +1368,7 @@ function closeRoleEditor(){ document.getElementById('role-modal').classList.remo
 /* ──────── INVITE USER ──────── */
 let _invite = null;
 function _invSeg(title,desc,key){
-  const btns = ROLE_LEVELS.map(function(l){
+  const btns = PROD_LEVELS[key].map(function(l){
     const lbl = l==='none' ? 'None' : l[0].toUpperCase()+l.slice(1);
     return '<button data-lvl="'+l+'" class="'+(_invite[key]===l?'active':'')+'" onclick="_invSetLevel(\''+key+'\',\''+l+'\')">'+lbl+'</button>';
   }).join('');
