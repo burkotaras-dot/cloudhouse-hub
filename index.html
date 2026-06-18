@@ -955,10 +955,10 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
     <!-- ══════════ CP · ENTITLEMENTS ══════════ -->
     <div class="view" id="v-cp-entitlements">
       <div class="page-pad">
-        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Licensed products, seat usage, and renewal dates for your organisation.</div></div>
+        <div class="page-head"><div class="page-title">Entitlements</div><div class="page-sub">Licensed products, status, and renewal dates for your organisation.</div></div>
         <div class="panel">
           <table class="tbl">
-            <thead><tr><th>Product</th><th>Description</th><th style="width:240px;">Seats in use</th><th>Status</th><th>Renewal</th></tr></thead>
+            <thead><tr><th>Product</th><th>Description</th><th>Status</th><th>Renewal</th></tr></thead>
             <tbody id="ent-tbody"></tbody>
           </table>
         </div>
@@ -1405,15 +1405,10 @@ function renderEnt(){
     const ico = t.img
       ? '<img src="'+t.img+'" alt="'+e[0]+'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;display:block;">'
       : '<div class="tile-icon '+e[6]+'" style="width:34px;height:34px;border-radius:9px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">'+t.icon+'</svg></div>';
-    const used=e[2], total=e[3], pct=Math.round(used/total*100);
-    const fillColor = pct>=90?'#FB3C44':pct>=70?'#F59E0B':'#1FC774';
-    const bar='<div class="seat-bar-wrap"><div class="seat-bar"><div class="seat-bar-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>'
-      +'<span class="seat-label">'+used+' / '+total+'</span></div>';
     const status='<span class="ent-status '+e[4]+'">'+e[4][0].toUpperCase()+e[4].slice(1)+'</span>';
     return '<tr>'
       +'<td><div style="display:flex;align-items:center;gap:10px;">'+ico+'<span style="font-weight:600;">'+e[0]+'</span></div></td>'
       +'<td class="muted">'+e[1]+'</td>'
-      +'<td>'+bar+'</td>'
       +'<td>'+status+'</td>'
       +'<td class="muted">'+e[5]+'</td>'
       +'</tr>';
