@@ -546,6 +546,15 @@ table.tbl { width:100%; border-collapse:collapse; }
 .fld-input:focus { outline:none; border-color:var(--accent-bright); box-shadow:0 0 0 3px var(--brand-soft); }
 .fld-input.err { border-color:var(--status-danger); box-shadow:0 0 0 3px rgba(251,60,68,0.12); }
 .fld-err { font-size:12px; color:var(--status-danger); margin-top:6px; }
+.fld { margin-bottom:18px; }
+.fld-help { font-size:12px; color:var(--text-subtle); margin-top:6px; }
+.fld-help strong { color:var(--text-sec); font-weight:600; }
+.fld-prefill { font-size:12px; color:var(--accent-text); margin-top:6px; display:flex; align-items:center; gap:5px; }
+.org-create { max-width:440px; margin:0 auto; background:var(--bg-surface); border:1px solid var(--border-default); border-radius:16px; padding:30px 28px; box-shadow:var(--shadow-md); }
+.oc-head { margin-bottom:22px; }
+.oc-head h2 { font-size:20px; font-weight:800; letter-spacing:-0.4px; margin-bottom:6px; }
+.oc-head p { font-size:14px; color:var(--text-sec); line-height:1.55; }
+.org-create .btn { width:100%; justify-content:center; margin-top:4px; }
 
 /* ── Pagination ── */
 .pager { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--border-subtle); }
@@ -686,6 +695,7 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
       <button data-s="single"  onclick="setScenario('single')">Single-app</button>
       <button data-s="none"    onclick="setScenario('none')">No entitlement</button>
       <button data-s="pending" onclick="setScenario('pending')">Pending invite</button>
+      <button data-s="no-org"  onclick="setScenario('no-org')">New user · no org</button>
     </div>
   </div>
   <div class="topbar-right">
@@ -796,6 +806,32 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
                 <button class="btn btn-ghost" onclick="toast('Contacting support…')">Contact support</button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- new user · no organisation -->
+        <div id="portal-orgcreate" style="display:none;">
+          <div class="org-create">
+            <div class="oc-head">
+              <h2>Create your organisation</h2>
+              <p>You're not part of an organisation yet. Set one up to start using Cloudhouse Hub.</p>
+            </div>
+            <div class="fld">
+              <label class="fld-label" for="oc-name">Organisation name</label>
+              <input id="oc-name" class="fld-input" type="text" autocomplete="off" placeholder="e.g. Northwind" oninput="ocOnName()">
+              <div class="fld-prefill" id="oc-prefill" style="display:none;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Prefilled from your company domain — edit if needed
+              </div>
+              <div class="fld-err" id="oc-name-err" style="display:none;">Enter an organisation name.</div>
+            </div>
+            <div class="fld">
+              <label class="fld-label" for="oc-slug">Slug</label>
+              <input id="oc-slug" class="fld-input" type="text" autocomplete="off" placeholder="northwind" oninput="ocOnSlug()" onkeydown="if(event.key==='Enter')ocSubmit()">
+              <div class="fld-help" id="oc-slug-help">Used for your custom service address — <strong id="oc-slug-preview">org</strong>.cloudhouse.app</div>
+              <div class="fld-err" id="oc-slug-err" style="display:none;">Use lowercase letters, numbers and hyphens only.</div>
+            </div>
+            <button class="btn btn-primary" onclick="ocSubmit()">Create organisation</button>
           </div>
         </div>
       </div>
@@ -1171,7 +1207,8 @@ function setScenario(s){
   const pending = document.getElementById('portal-pending');
   const single = document.getElementById('portal-single');
   const none = document.getElementById('portal-none');
-  grid.style.display='grid'; pending.innerHTML=''; single.style.display='none'; none.style.display='none';
+  const orgc = document.getElementById('portal-orgcreate');
+  grid.style.display='grid'; pending.innerHTML=''; single.style.display='none'; none.style.display='none'; orgc.style.display='none';
   document.getElementById('portal-tiles').style.display='block';
   document.getElementById('portal-tiles').classList.toggle('pending-left', s==='pending');
 
@@ -1194,8 +1231,71 @@ function setScenario(s){
       + '<div class="tile-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:540px">'
       + tileHTML('foundry',{pending:true,tip:'Invitation sent — awaiting acceptance'})
       + tileHTML('foundry-studio',{locked:true,tip:'No entitlement — request access'}) + '</div>';
+  } else if(s==='no-org'){
+    document.getElementById('portal-tiles').style.display='none';
+    orgc.style.display='block';
+    ocInit();
   }
   if(document.body.classList.contains('dark')) _syncInlineTheme(true);
+}
+
+/* ════════════════ ORG CREATION (new user · no org) ════════════════ */
+let _ocSlugTouched = false;
+function _slugify(v){ return v.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+/* Derive an org name + slug from the signed-in user's company domain, if resolvable. */
+function _orgFromDomain(){
+  const email = (USERS[0] && USERS[0][0]) || '';
+  const domain = email.split('@')[1] || '';
+  const label = domain.split('.')[0] || '';
+  if(!label) return null;
+  return { name: label.charAt(0).toUpperCase() + label.slice(1), slug: _slugify(label) };
+}
+function ocInit(){
+  _ocSlugTouched = false;
+  const nameEl = document.getElementById('oc-name');
+  const slugEl = document.getElementById('oc-slug');
+  const pre = _orgFromDomain();
+  if(pre){
+    nameEl.value = pre.name; slugEl.value = pre.slug;
+    document.getElementById('oc-prefill').style.display = 'flex';
+  } else {
+    nameEl.value = ''; slugEl.value = '';
+    document.getElementById('oc-prefill').style.display = 'none';
+  }
+  nameEl.classList.remove('err'); slugEl.classList.remove('err');
+  document.getElementById('oc-name-err').style.display = 'none';
+  document.getElementById('oc-slug-err').style.display = 'none';
+  _ocUpdatePreview();
+}
+function _ocUpdatePreview(){
+  document.getElementById('oc-slug-preview').textContent = document.getElementById('oc-slug').value || 'org';
+}
+function ocOnName(){
+  const nameEl = document.getElementById('oc-name');
+  nameEl.classList.remove('err'); document.getElementById('oc-name-err').style.display='none';
+  document.getElementById('oc-prefill').style.display='none';
+  if(!_ocSlugTouched){ document.getElementById('oc-slug').value = _slugify(nameEl.value); _ocUpdatePreview(); }
+}
+function ocOnSlug(){
+  _ocSlugTouched = true;
+  const slugEl = document.getElementById('oc-slug');
+  slugEl.value = slugEl.value.toLowerCase().replace(/[^a-z0-9-]/g,'');
+  slugEl.classList.remove('err'); document.getElementById('oc-slug-err').style.display='none';
+  document.getElementById('oc-prefill').style.display='none';
+  _ocUpdatePreview();
+}
+function ocSubmit(){
+  const nameEl = document.getElementById('oc-name');
+  const slugEl = document.getElementById('oc-slug');
+  const name = nameEl.value.trim();
+  const slug = slugEl.value.trim();
+  let ok = true;
+  if(!name){ nameEl.classList.add('err'); document.getElementById('oc-name-err').style.display='block'; ok=false; }
+  if(!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(slug)){ slugEl.classList.add('err'); document.getElementById('oc-slug-err').style.display='block'; ok=false; }
+  if(!ok) return;
+  /* Org created — user becomes org admin and lands in Hub. */
+  toast('Organisation “'+name+'” created');
+  setScenario('multi');
 }
 
 /* ════════════════ DATA ════════════════ */
