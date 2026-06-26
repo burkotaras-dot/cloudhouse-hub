@@ -550,11 +550,15 @@ table.tbl { width:100%; border-collapse:collapse; }
 .fld-help { font-size:12px; color:var(--text-subtle); margin-top:6px; }
 .fld-help strong { color:var(--text-sec); font-weight:600; }
 .fld-prefill { font-size:12px; color:var(--accent-text); margin-top:6px; display:flex; align-items:center; gap:5px; }
-.org-create { max-width:440px; margin:0 auto; background:var(--bg-surface); border:1px solid var(--border-default); border-radius:16px; padding:30px 28px; box-shadow:var(--shadow-md); }
-.oc-head { margin-bottom:22px; }
-.oc-head h2 { font-size:20px; font-weight:800; letter-spacing:-0.4px; margin-bottom:6px; }
-.oc-head p { font-size:14px; color:var(--text-sec); line-height:1.55; }
-.org-create .btn { width:100%; justify-content:center; margin-top:4px; }
+.org-create { max-width:440px; margin:0 auto; background:var(--bg-surface); border:1px solid var(--border-default); border-radius:18px; padding:36px 34px 32px; box-shadow:var(--shadow-md); }
+.oc-head { margin-bottom:28px; }
+.oc-head h2 { font-size:20px; font-weight:800; letter-spacing:-0.4px; margin-bottom:8px; }
+.oc-head p { font-size:14px; color:var(--text-sec); line-height:1.6; max-width:36ch; }
+.org-create .fld { margin-bottom:22px; }
+.org-create .fld-label { display:block; margin-bottom:10px; }
+.org-create .fld-input { padding:12px 14px; }
+.org-create .fld-help, .org-create .fld-prefill { margin-top:8px; }
+.org-create .btn { width:100%; justify-content:center; margin-top:10px; padding-top:13px; padding-bottom:13px; }
 
 /* ── Pagination ── */
 .pager { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--border-subtle); }
@@ -767,8 +771,8 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
       <canvas class="portal-dots" id="portal-dots"></canvas>
       <div class="portal-wrap">
         <div class="portal-head">
-          <h1>Welcome back, Paul</h1>
-          <p>Choose an application to continue.</p>
+          <h1 id="portal-title">Welcome back, Paul</h1>
+          <p id="portal-sub">Choose an application to continue.</p>
         </div>
 
         <!-- tile grid -->
@@ -812,10 +816,6 @@ body.dark .notice.info .notice-icon { background:rgba(122,137,146,0.16); }
         <!-- new user · no organisation -->
         <div id="portal-orgcreate" style="display:none;">
           <div class="org-create">
-            <div class="oc-head">
-              <h2>Create your organisation</h2>
-              <p>You're not part of an organisation yet. Set one up to start using Cloudhouse Hub.</p>
-            </div>
             <div class="fld">
               <label class="fld-label" for="oc-name">Organisation name</label>
               <input id="oc-name" class="fld-input" type="text" autocomplete="off" placeholder="e.g. Northwind" oninput="ocOnName()">
@@ -1210,6 +1210,8 @@ function setScenario(s){
   const orgc = document.getElementById('portal-orgcreate');
   grid.style.display='grid'; pending.innerHTML=''; single.style.display='none'; none.style.display='none'; orgc.style.display='none';
   document.getElementById('portal-tiles').style.display='block';
+  document.getElementById('portal-title').textContent = 'Welcome back, Paul';
+  document.getElementById('portal-sub').textContent = 'Choose an application to continue.';
   document.getElementById('portal-tiles').classList.toggle('pending-left', s==='pending');
 
   if(s==='multi'){
@@ -1233,6 +1235,8 @@ function setScenario(s){
       + tileHTML('foundry-studio',{locked:true,tip:'No entitlement — request access'}) + '</div>';
   } else if(s==='no-org'){
     document.getElementById('portal-tiles').style.display='none';
+    document.getElementById('portal-title').textContent = 'Set up your organisation';
+    document.getElementById('portal-sub').textContent = 'Create an organisation to continue to Cloudhouse.';
     orgc.style.display='block';
     ocInit();
   }
